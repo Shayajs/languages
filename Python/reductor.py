@@ -31,7 +31,7 @@ class Reductor():
         try:
             self.number_class = int(number)
         except ValueError:
-            print("Vous devez ")
+            print("Vous devez placer un nombre")
             raise
         except:
             print("Une erreur inconnue s'est infiltrée")
