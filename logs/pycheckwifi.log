@@ -1,0 +1,306 @@
+--------------------------------------------------------------------------------------------------------------------
+pywificheck log file for wifi issues and more 0.0.2 - 2021-01-06 22:41:08.844349
+--------------------------------------------------------------------------------------------------------------------
+Ce fichier contient un certain nombre de commandes qui permettront, à la fois de fournir suffisament d'information sur la configuration et sur le réseau wifi, afin de pouvoir aider manuellement l'utilisateur à faire fonctionner son wifi et plus encore
+
+--------------------------------------------------------------------------------------------------------------------
+Info Distribution Version
+--------------------------------------------------------------------------------------------------------------------
+DISTRIB_ID=ManjaroLinux
+DISTRIB_RELEASE=20.2
+DISTRIB_CODENAME=Nibia
+DISTRIB_DESCRIPTION="Manjaro Linux"
+
+--------------------------------------------------------------------------------------------------------------------
+Zone Wifi
+--------------------------------------------------------------------------------------------------------------------
+global
+country 00: DFS-UNSET
+	(2402 - 2472 @ 40), (N/A, 20), (N/A)
+	(2457 - 2482 @ 20), (N/A, 20), (N/A), AUTO-BW, PASSIVE-SCAN
+	(2474 - 2494 @ 20), (N/A, 20), (N/A), NO-OFDM, PASSIVE-SCAN
+	(5170 - 5250 @ 80), (N/A, 20), (N/A), AUTO-BW, PASSIVE-SCAN
+	(5250 - 5330 @ 80), (N/A, 20), (0 ms), DFS, AUTO-BW, PASSIVE-SCAN
+	(5490 - 5730 @ 160), (N/A, 20), (0 ms), DFS, PASSIVE-SCAN
+	(5735 - 5835 @ 80), (N/A, 20), (N/A), PASSIVE-SCAN
+	(57240 - 63720 @ 2160), (N/A, 0), (N/A)
+
+phy#0 (self-managed)
+country FR: DFS-UNSET
+	(2402 - 2437 @ 40), (6, 22), (N/A), AUTO-BW, NO-HT40MINUS, NO-80MHZ, NO-160MHZ
+	(2422 - 2462 @ 40), (6, 22), (N/A), AUTO-BW, NO-80MHZ, NO-160MHZ
+	(2447 - 2482 @ 40), (6, 22), (N/A), AUTO-BW, NO-HT40PLUS, NO-80MHZ, NO-160MHZ
+	(5170 - 5190 @ 80), (6, 22), (N/A), NO-OUTDOOR, AUTO-BW, IR-CONCURRENT, NO-HT40MINUS, NO-160MHZ, PASSIVE-SCAN
+	(5190 - 5210 @ 80), (6, 22), (N/A), NO-OUTDOOR, AUTO-BW, IR-CONCURRENT, NO-HT40PLUS, NO-160MHZ, PASSIVE-SCAN
+	(5210 - 5230 @ 80), (6, 22), (N/A), NO-OUTDOOR, AUTO-BW, IR-CONCURRENT, NO-HT40MINUS, NO-160MHZ, PASSIVE-SCAN
+	(5230 - 5250 @ 80), (6, 22), (N/A), NO-OUTDOOR, AUTO-BW, IR-CONCURRENT, NO-HT40PLUS, NO-160MHZ, PASSIVE-SCAN
+	(5250 - 5270 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, NO-160MHZ, PASSIVE-SCAN
+	(5270 - 5290 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, NO-160MHZ, PASSIVE-SCAN
+	(5290 - 5310 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, NO-160MHZ, PASSIVE-SCAN
+	(5310 - 5330 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, NO-160MHZ, PASSIVE-SCAN
+	(5490 - 5510 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, NO-160MHZ, PASSIVE-SCAN
+	(5510 - 5530 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, NO-160MHZ, PASSIVE-SCAN
+	(5530 - 5550 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, NO-160MHZ, PASSIVE-SCAN
+	(5550 - 5570 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, NO-160MHZ, PASSIVE-SCAN
+	(5570 - 5590 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, NO-160MHZ, PASSIVE-SCAN
+	(5590 - 5610 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, NO-160MHZ, PASSIVE-SCAN
+	(5610 - 5630 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, NO-160MHZ, PASSIVE-SCAN
+	(5630 - 5650 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, NO-160MHZ, PASSIVE-SCAN
+	(5650 - 5670 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, NO-160MHZ, PASSIVE-SCAN
+	(5670 - 5690 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, NO-160MHZ, PASSIVE-SCAN
+	(5690 - 5710 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, NO-160MHZ, PASSIVE-SCAN
+	(5710 - 5730 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, NO-160MHZ, PASSIVE-SCAN
+	(5735 - 5755 @ 80), (6, 22), (N/A), AUTO-BW, IR-CONCURRENT, NO-HT40MINUS, NO-160MHZ, PASSIVE-SCAN
+	(5755 - 5775 @ 80), (6, 22), (N/A), AUTO-BW, IR-CONCURRENT, NO-HT40PLUS, NO-160MHZ, PASSIVE-SCAN
+	(5775 - 5795 @ 80), (6, 22), (N/A), AUTO-BW, IR-CONCURRENT, NO-HT40MINUS, NO-160MHZ, PASSIVE-SCAN
+	(5795 - 5815 @ 80), (6, 22), (N/A), AUTO-BW, IR-CONCURRENT, NO-HT40PLUS, NO-160MHZ, PASSIVE-SCAN
+	(5815 - 5835 @ 20), (6, 22), (N/A), AUTO-BW, IR-CONCURRENT, NO-HT40MINUS, NO-HT40PLUS, NO-80MHZ, NO-160MHZ, PASSIVE-SCAN
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+Info Periphériques Usb
+--------------------------------------------------------------------------------------------------------------------
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 004: ID 058f:5608 Alcor Micro Corp. USB 2.0 Camera
+Bus 001 Device 003: ID 8087:0a2a Intel Corp. Bluetooth wireless interface
+Bus 001 Device 002: ID 0bda:0129 Realtek Semiconductor Corp. RTS5129 Card Reader Controller
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+--------------------------------------------------------------------------------------------------------------------
+Info Périphériques Pci
+--------------------------------------------------------------------------------------------------------------------
+00:00.0 Host bridge: Intel Corporation Gemini Lake Host Bridge (rev 03)
+00:00.1 Signal processing controller: Intel Corporation Celeron/Pentium Silver Processor Dynamic Platform and Thermal Framework Processor Participant (rev 03)
+00:02.0 VGA compatible controller: Intel Corporation UHD Graphics 605 (rev 03)
+00:0e.0 Audio device: Intel Corporation Celeron/Pentium Silver Processor High Definition Audio (rev 03)
+00:0f.0 Communication controller: Intel Corporation Celeron/Pentium Silver Processor Trusted Execution Engine Interface (rev 03)
+00:12.0 SATA controller: Intel Corporation Device 31e3 (rev 03)
+00:13.0 PCI bridge: Intel Corporation Gemini Lake PCI Express Root Port (rev f3)
+00:14.0 PCI bridge: Intel Corporation Gemini Lake PCI Express Root Port (rev f3)
+00:15.0 USB controller: Intel Corporation Device 31a8 (rev 03)
+00:16.0 Signal processing controller: Intel Corporation Celeron/Pentium Silver Processor Serial IO I2C Host Controller (rev 03)
+00:16.1 Signal processing controller: Intel Corporation Celeron/Pentium Silver Processor Serial IO I2C Host Controller (rev 03)
+00:16.2 Signal processing controller: Intel Corporation Device 31b0 (rev 03)
+00:16.3 Signal processing controller: Intel Corporation Device 31b2 (rev 03)
+00:17.0 Signal processing controller: Intel Corporation Device 31b4 (rev 03)
+00:17.1 Signal processing controller: Intel Corporation Device 31b6 (rev 03)
+00:17.2 Signal processing controller: Intel Corporation Device 31b8 (rev 03)
+00:17.3 Signal processing controller: Intel Corporation Device 31ba (rev 03)
+00:18.0 Signal processing controller: Intel Corporation Celeron/Pentium Silver Processor Serial IO UART Host Controller (rev 03)
+00:18.1 Signal processing controller: Intel Corporation Celeron/Pentium Silver Processor Serial IO UART Host Controller (rev 03)
+00:18.2 Signal processing controller: Intel Corporation Celeron/Pentium Silver Processor Serial IO UART Host Controller (rev 03)
+00:18.3 Signal processing controller: Intel Corporation Celeron/Pentium Silver Processor Serial IO UART Host Controller (rev 03)
+00:19.0 Signal processing controller: Intel Corporation Celeron/Pentium Silver Processor Serial IO SPI Host Controller (rev 03)
+00:19.1 Signal processing controller: Intel Corporation Celeron/Pentium Silver Processor Serial IO SPI Host Controller (rev 03)
+00:19.2 Signal processing controller: Intel Corporation Celeron/Pentium Silver Processor Serial IO SPI Host Controller (rev 03)
+00:1e.0 SD Host controller: Intel Corporation Device 31d0 (rev 03)
+00:1f.0 ISA bridge: Intel Corporation Device 31e8 (rev 03)
+00:1f.1 SMBus: Intel Corporation Celeron/Pentium Silver Processor Gaussian Mixture Model (rev 03)
+01:00.0 Network controller: Intel Corporation Wireless 3165 (rev ff)
+
+--------------------------------------------------------------------------------------------------------------------
+Info Réseau
+--------------------------------------------------------------------------------------------------------------------
+Network:
+  Device-1: Intel Wireless 3165 driver: iwlwifi v: kernel port: f040 bus ID: 01:00.0 
+
+--------------------------------------------------------------------------------------------------------------------
+Info Etendues Configuration
+--------------------------------------------------------------------------------------------------------------------
+System:
+  Kernel: 5.10.2-2-MANJARO x86_64 bits: 64 compiler: gcc v: 10.2.0 
+  Desktop: MATE 1.24.1 info: mate-panel wm: marco 1.24.1 dm: LightDM 1.30.0 
+  Distro: Manjaro Linux 
+Machine:
+  Type: Laptop System: TECLAST product: F7 Plus v: N/A serial: <filter> Chassis: 
+  type: 10 serial: <filter> 
+  Mobo: TECLAST model: F7 Plus v: 3.1 serial: <filter> UEFI: American Megatrends 
+  v: tPAD 3.07 date: 12/26/2019 
+Battery:
+  ID-1: BAT0 charge: 35.7 Wh condition: 40.9/37.7 Wh (108%) volts: 7.6/N/A 
+  model: N/A type: Unknown serial: <filter> status: Discharging 
+CPU:
+  Info: Quad Core model: Intel Celeron N4100 bits: 64 type: MCP arch: Goldmont Plus 
+  rev: 1 L2 cache: 4 MiB 
+  flags: lm nx pae sse sse2 sse3 sse4_1 sse4_2 ssse3 vmx bogomips: 8756 
+  Speed: 796 MHz min/max: 800/2400 MHz Core speeds (MHz): 1: 796 2: 796 3: 796 
+  4: 796 
+Graphics:
+  Device-1: Intel UHD Graphics 605 driver: i915 v: kernel bus ID: 00:02.0 
+  chip ID: 8086:3185 
+  Device-2: Alcor Micro USB 2.0 Camera type: USB driver: uvcvideo bus ID: 1-8:4 
+  chip ID: 058f:5608 
+  Display: x11 server: X.org 1.20.10 compositor: marco v: 1.24.1 driver: intel 
+  unloaded: modesetting alternate: fbdev,vesa resolution: <missing: xdpyinfo> 
+  OpenGL: renderer: Mesa Intel UHD Graphics 600 (GLK 2) v: 4.6 Mesa 20.3.1 
+  direct render: Yes 
+Audio:
+  Device-1: Intel Celeron/Pentium Silver Processor High Definition Audio 
+  vendor: Realtek driver: snd_hda_intel v: kernel bus ID: 00:0e.0 chip ID: 8086:3198 
+  Sound Server: ALSA v: k5.10.2-2-MANJARO 
+Network:
+  Device-1: Intel Wireless 3165 driver: iwlwifi v: kernel port: f040 bus ID: 01:00.0 
+  chip ID: 8086:3165 
+  IF: wlp1s0 state: up mac: <filter> 
+Drives:
+  Local Storage: total: 238.47 GiB used: 20.59 GiB (8.6%) 
+  ID-1: /dev/sda vendor: Hikvision model: HS-SSD-E100N 256G size: 238.47 GiB 
+  speed: 6.0 Gb/s serial: <filter> rev: 3A0S 
+  Message: No Optical or Floppy data was found. 
+Partition:
+  ID-1: / size: 29.4 GiB used: 20.59 GiB (70.0%) fs: ext4 dev: /dev/sda8 label: N/A 
+  ID-2: /boot/efi size: 511.4 MiB used: 332 KiB (0.1%) fs: vfat dev: /dev/sda6 
+  label: N/A 
+Swap:
+  ID-1: swap-1 type: partition size: 8 GiB used: 0 KiB (0.0%) priority: -2 
+  dev: /dev/sda7 label: N/A 
+Sensors:
+  System Temperatures: cpu: 33.0 C mobo: N/A 
+  Fan Speeds (RPM): N/A 
+Info:
+  Processes: 186 Uptime: 1m wakeups: 1 Memory: 7.17 GiB used: 861 MiB (11.7%) 
+  Init: systemd v: 247 Compilers: gcc: 10.2.0 clang: 11.0.0 Packages: pacman: 1318 
+  Shell: Bash v: 5.1.0 running in: mate-terminal inxi: 3.2.01 
+
+--------------------------------------------------------------------------------------------------------------------
+Info Réseau
+--------------------------------------------------------------------------------------------------------------------
+wlp1s0    IEEE 802.11  ESSID:"Livebox-87cc"  
+          Mode:Managed  Frequency:2.437 GHz  Access Point: 00:19:70:B4:09:9A   
+          Bit Rate=65 Mb/s   Tx-Power=22 dBm   
+          Retry short limit:7   RTS thr:off   Fragment thr:off
+          Power Management:on
+          Link Quality=60/70  Signal level=-50 dBm  
+          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+          Tx excessive retries:0  Invalid misc:164   Missed beacon:0
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+Info Réseau
+--------------------------------------------------------------------------------------------------------------------
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 90  bytes 8190 (7.9 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 90  bytes 8190 (7.9 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+wlp1s0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.23  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::a6bd:404a:a5a1:8b9e  prefixlen 64  scopeid 0x20<link>
+        ether 24:41:8c:b0:f0:22  txqueuelen 1000  (Ethernet)
+        RX packets 4705  bytes 6927297 (6.6 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 2605  bytes 256251 (250.2 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+Info Reseau Carte Pci
+--------------------------------------------------------------------------------------------------------------------
+01:00.0 Network controller: Intel Corporation Wireless 3165 (rev ff)
+
+--------------------------------------------------------------------------------------------------------------------
+Info Réseau Etendue Carte Pci
+--------------------------------------------------------------------------------------------------------------------
+01:00.0 Network controller [0280]: Intel Corporation Wireless 3165 [8086:3165] (rev ff)
+	Kernel driver in use: iwlwifi
+	Kernel modules: iwlwifi
+
+--------------------------------------------------------------------------------------------------------------------
+Info sur Wifi - Force et Disponibilité
+--------------------------------------------------------------------------------------------------------------------
+IN-USE  BSSID              SSID             MODE   CHAN  RATE      SIGNAL  BARS  SECURITY    
+        06:19:70:B4:09:9A  orange           Infra  6     130 Mb/s  79      ▂▄▆_  --          
+*       00:19:70:B4:09:9A  Livebox-87cc     Infra  6     130 Mb/s  70      ▂▄▆_  WPA1 WPA2   
+        F2:B7:84:EE:61:B4  freemarchi       Infra  11    270 Mb/s  34      ▂▄__  WPA1        
+        F2:B7:84:EE:61:B5  --               Infra  11    270 Mb/s  34      ▂▄__  WPA2        
+        FC:AB:90:93:8A:D3  HUAWEI-YOKO      Infra  6     270 Mb/s  32      ▂▄__  WPA2        
+        F2:B7:84:EE:61:B7  FreeWifi_secure  Infra  11    270 Mb/s  32      ▂▄__  WPA1 802.1X 
+        F2:B7:84:EE:61:B6  FreeWifi         Infra  11    270 Mb/s  32      ▂▄__  --          
+        00:37:B7:83:E8:D9  Livebox-E8D8     Infra  108   405 Mb/s  24      ▂___  WPA1 WPA2   
+
+
+--------------------------------------------------------------------------------------------------------------------
+Info Connection SSID
+--------------------------------------------------------------------------------------------------------------------
+NAME                    UUID                                  TYPE       DEVICE 
+Livebox-87cc            ff290e2e-be60-4a3b-a856-17473eb25ed6  wifi       wlp1s0 
+Shaya's Phone  Network  a094ee3c-60ca-45c9-96a9-72d98375dc8f  bluetooth  --     
+Shukufukuyo             e69b277a-0d6e-4c32-9b34-4262ade3437b  wifi       --     
+
+
+--------------------------------------------------------------------------------------------------------------------
+Info wifi-ssid-mac add
+--------------------------------------------------------------------------------------------------------------------
+phy#0
+	Unnamed/non-netdev interface
+		wdev 0x2
+		addr 24:41:8c:b0:f0:22
+		type P2P-device
+		txpower 0.00 dBm
+	Interface wlp1s0
+		ifindex 2
+		wdev 0x1
+		addr 24:41:8c:b0:f0:22
+		ssid Livebox-87cc
+		type managed
+		channel 6 (2437 MHz), width: 20 MHz, center1: 2437 MHz
+		txpower 22.00 dBm
+		multicast TXQ:
+			qsz-byt	qsz-pkt	flows	drops	marks	overlmt	hashcol	tx-bytes	tx-packets
+			0	0	0	0	0	0	0	0		0
+
+
+--------------------------------------------------------------------------------------------------------------------
+Fonctionnement Bluetooth
+--------------------------------------------------------------------------------------------------------------------
+● bluetooth.service - Bluetooth service
+     Loaded: loaded (/usr/lib/systemd/system/bluetooth.service; enabled; vendor preset: disabled)
+     Active: active (running) since Wed 2021-01-06 22:39:32 CET; 1min 43s ago
+       Docs: man:bluetoothd(8)
+   Main PID: 735 (bluetoothd)
+     Status: "Running"
+      Tasks: 1 (limit: 8784)
+     Memory: 2.2M
+     CGroup: /system.slice/bluetooth.service
+             └─735 /usr/lib/bluetooth/bluetoothd
+
+janv. 06 22:39:32 Lucas-menjalinux bluetoothd[735]: src/main.c:parse_controller_config() Key file does not have key “LEMinConnectionInterval” in group “Controller”
+janv. 06 22:39:32 Lucas-menjalinux bluetoothd[735]: src/main.c:parse_controller_config() Key file does not have key “LEMaxConnectionInterval” in group “Controller”
+janv. 06 22:39:32 Lucas-menjalinux bluetoothd[735]: src/main.c:parse_controller_config() Key file does not have key “LEConnectionLatency” in group “Controller”
+janv. 06 22:39:32 Lucas-menjalinux bluetoothd[735]: src/main.c:parse_controller_config() Key file does not have key “LEConnectionSupervisionTimeout” in group “Controller”
+janv. 06 22:39:32 Lucas-menjalinux bluetoothd[735]: src/main.c:parse_controller_config() Key file does not have key “LEAutoconnecttimeout” in group “Controller”
+janv. 06 22:39:32 Lucas-menjalinux systemd[1]: Started Bluetooth service.
+janv. 06 22:39:32 Lucas-menjalinux bluetoothd[735]: Starting SDP server
+janv. 06 22:39:32 Lucas-menjalinux bluetoothd[735]: Bluetooth management interface 1.18 initialized
+janv. 06 22:39:33 Lucas-menjalinux bluetoothd[735]: Endpoint registered: sender=:1.30 path=/MediaEndpoint/A2DPSink/sbc
+janv. 06 22:39:33 Lucas-menjalinux bluetoothd[735]: Endpoint registered: sender=:1.30 path=/MediaEndpoint/A2DPSource/sbc
+
+
+--------------------------------------------------------------------------------------------------------------------
+Affichage des journaux pour NetworkManager
+--------------------------------------------------------------------------------------------------------------------
+janv. 06 22:39:36 Lucas-menjalinux NetworkManager[324]: <info>  [1609969176.7525] device (wlp1s0): state change: secondaries -> activated (reason 'none', sys-iface-state: 'managed')
+janv. 06 22:39:36 Lucas-menjalinux NetworkManager[324]: <info>  [1609969176.7532] manager: NetworkManager state is now CONNECTED_LOCAL
+janv. 06 22:39:36 Lucas-menjalinux NetworkManager[324]: <info>  [1609969176.7561] manager: NetworkManager state is now CONNECTED_SITE
+janv. 06 22:39:36 Lucas-menjalinux NetworkManager[324]: <info>  [1609969176.7563] policy: set 'Livebox-87cc' (wlp1s0) as default for IPv4 routing and DNS
+janv. 06 22:39:36 Lucas-menjalinux NetworkManager[324]: <info>  [1609969176.7606] device (wlp1s0): Activation: successful, device activated.
+janv. 06 22:39:36 Lucas-menjalinux NetworkManager[324]: <info>  [1609969176.7630] manager: startup complete
+janv. 06 22:39:37 Lucas-menjalinux NetworkManager[324]: <info>  [1609969177.1800] manager: NetworkManager state is now CONNECTED_GLOBAL
+janv. 06 22:39:37 Lucas-menjalinux NetworkManager[324]: <info>  [1609969177.6639] manager: (90:06:28:E4:62:0E): new Bluetooth device (/org/freedesktop/NetworkManager/Devices/4)
+janv. 06 22:39:37 Lucas-menjalinux NetworkManager[324]: <info>  [1609969177.6644] device (90:06:28:E4:62:0E): state change: unmanaged -> unavailable (reason 'managed', sys-iface-state: 'external')
+janv. 06 22:39:37 Lucas-menjalinux NetworkManager[324]: <info>  [1609969177.6657] device (90:06:28:E4:62:0E): state change: unavailable -> disconnected (reason 'none', sys-iface-state: 'managed')
+
+--------------------------------------------------------------------------------------------------------------------
+Fichier de Deboguage Wifi 'pywificheck.log'
+--------------------------------------------------------------------------------------------------------------------
+Ce script a crée un fichier appelé 'pywificheck.log qui contient toutes les sorties des commandes 
+affichées au-dessus. Ouvrer ce fichier et poster le sur le forum. Toutes ces informations nous 
+aiderons à trouver le plus rapidement la solution à votre problème de wifi/réseau. D'autres commandes non incluses 
+dans ce fichier seront peut-être necessaire à votre cas.
