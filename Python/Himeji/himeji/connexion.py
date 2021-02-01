@@ -306,7 +306,7 @@ class ConnectionWindow:
                 self.label2.adjustSize()
                 self.label2.show()
                 self.connected_one = (self.champ1.text(), True)
-                
+
                 if os.path.exists('./temp/'):
                     pass
                 else:
@@ -454,3 +454,7 @@ class ConnectionWindow:
 if __name__ == "__main__":
     # app = IntroWindow()
     connexion = ConnectionWindow()
+    sleep(2)
+    os.remove("./temp/c.himeji")
+    os.rmdir("temp")
+    exit()

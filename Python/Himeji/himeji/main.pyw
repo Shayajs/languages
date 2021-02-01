@@ -18,3 +18,5 @@ app = IntroWindow()
 winConnect = ConnectionWindow()
 
 os.remove("./temp/c.himeji")
+
+exit()
