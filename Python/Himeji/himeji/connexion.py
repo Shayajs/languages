@@ -306,6 +306,11 @@ class ConnectionWindow:
                 self.label2.adjustSize()
                 self.label2.show()
                 self.connected_one = (self.champ1.text(), True)
+                
+                if os.path.exists('./temp/'):
+                    pass
+                else:
+                    os.mkdir("temp")
 
                 with open("./temp/c.himeji", "wb") as connectOPEN:
                     pick = pickle.Pickler(connectOPEN)
