@@ -8,6 +8,10 @@ Informations :
 # Author: Lucas Espinar
 # Copyright: Creative Common
 
+
+version = '0.1.32'
+
+
 import sys
 import os
 from tkinter import Tk
@@ -30,6 +34,11 @@ from time import sleep
 from threading import Thread
 import pickle
 
+import urllib.request
+
+
+## DEBUT PROGRAMME ------------------------------
+
 def center(x, y) -> tuple:
     """
     Permet de centrer une fenetre avec les coordonnées de x et y de la fenetre
@@ -41,13 +50,27 @@ def center(x, y) -> tuple:
     hh = (height - y) // 2
     return ww, hh
 
+def verif_ver() -> str:
+    try:
+        url = urllib.request.Request("https://raw.githubusercontent.com/Shayajs/languages/master/Python/Himeji/himeji/bin/version.vhimeji")
+        url_open = urllib.request.urlopen(url)
+        send = url_open.read().decode('utf-8')
+        send = send.split("\n")[0]
+        print(f"> Dernière version {send} <")
+        return send
+    except:
+        return None
+
+
+## DEBUT CLASS ---------------------------------
 
 class IntroWindow:
     """
     It's that first window with the lesser information. To load main project.
     """
     def __init__(self):
-        self.version = "Version 0.1.31 Beta"
+        global version
+        self.version = version
 
         self.tha = Thread(None, self.chargement)
 
@@ -90,7 +113,7 @@ class IntroWindow:
             elif i % 4 == 0:
                 a = "   "
 
-            self.label2.setText(f"{self.version}\nVeuillez Patienter {a}")
+            self.label2.setText(f"Version {self.version}\nVeuillez Patienter {a}")
             self.label2.adjustSize()
 
             if i == time - 1:
@@ -104,13 +127,18 @@ class IntroWindow:
         QtWidgets.qApp.quit()
 
 
+
+# -------- Principal -----------
+
 class ConnectionWindow:
     """
     Fenetre de connexion simple
     """
     def __init__(self):
         ##Variables autres
+        global version
 
+        self.version = version
         self.files_enregistrement = None
         self.connected_one = None
 
@@ -145,10 +173,19 @@ class ConnectionWindow:
 
         self.label2 = QLabel(self.win)
         self.label2.setText("Mauvais identifiants, réessayez.")
-        self.label2.move(260, 175)
+        self.label2.move(260, 150)
         self.label2.setFont(QFont('Mangal', 11))
         self.label2.adjustSize()
         # self.label2.show()
+
+        self.label3 = QLabel(self.win)
+        self.label3.setText("Vérification de version en cours...")
+        self.label3.move(260, 190)
+        self.label3.setFont(QFont('Mangal', 11))
+        self.label3.adjustSize()
+        self.label3.show()
+        self.threadLabel3 = Thread(None, self.version_search)
+        self.threadLabel3.start()
 
         self.champ1 = QLineEdit(self.win)
         self.champ1.move(20, 140)
@@ -197,15 +234,16 @@ class ConnectionWindow:
         tha = Thread(None, self._timer_labe2)
         try:
             if self.files_enregistrement[self.champ1.text()] and self.files_enregistrement[self.champ1.text()] == self.champ2.text() :
-                print("Connected !")
+
                 self.label2.setText("Connecté !")
                 self.label2.setStyleSheet("color : green;")
                 self.label2.adjustSize()
                 self.label2.show()
                 tha.start()
                 self.connected_one = (self.champ1.text(), True)
+
             else:
-                print("MAUVAISE CO !")
+
                 self.label2.setStyleSheet("color : red;")
                 self.label2.show()
                 tha.start()
@@ -213,11 +251,29 @@ class ConnectionWindow:
             self.label2.show()
             self.label2.setStyleSheet("color : red;")
             tha.start()
-            print("Une erreur est survenue")
+
+    def version_search(self):
+        """
+        Vérifie si le logiciel est à jour
+        """
+        verif = verif_ver()
+        if self.version == verif:
+            self.label3.setText("Vous êtes à jour")
+            self.label3.adjustSize()
+            self.label3.setStyleSheet("color: green;")
+
+        elif self.version != str(verif):
+            print(verif, self.version)
+            self.label3.setText(f"La version {verif} est disponible !")
+            self.label3.adjustSize()
+            self.label3.setStyleSheet("color: steelblue;")
+
+        else:
+            self.label3.setText("Impossible de vérifier les mises à jours.")
 
     def _timer_labe2(self):
         """
-        Permettre un affichage limité de l'étiquette de suivi
+        Permettre un affichage limité de l'étiquette de connexion
         """
         sleep(2.5)
         self.label2.setVisible(False)
@@ -231,6 +287,9 @@ class ConnectionWindow:
             self.win2.show()
         except:
             print("Une erreur est encore survenue")
+
+# ----- Fin class principale ------
+
 
 app = IntroWindow()
 connexion = ConnectionWindow()
