@@ -4,12 +4,12 @@ Informations :
     Import total : sys, os, tkinter, threading(Thread, pickle, time(sleep), PyQt5
     PyQt5 > QtWidjets, QtGui, QtCore(Qt)
 """
-# Version: 0.1
+# Version: 0.1.33
 # Author: Lucas Espinar
 # Copyright: Creative Common
 
 
-version = '0.1.32'
+version = '0.1.33'
 
 
 import sys
@@ -222,8 +222,18 @@ class ConnectionWindow:
         # Page d'enregistrement
 
         self.win2 = QWidget()
-        self.win2.setGeometry(self.posx,self.posy,x,y)
-        self.win2.setWindowTitle("Page de Connexion")
+        x2, y2 = 270, 400
+        self.posx2, self.posy2 = center(x2, y2)
+        self.win2.setGeometry(self.posx2,self.posy2,x2,y2)
+        self.win2.setWindowTitle("S'enregistrer")
+        self.win2.setWindowIcon(QIcon("./bin/icon1.png"))
+
+        self.labelWin21 = QLabel(self.win2)
+        self.labelWin21.setText("S'enregistrer")
+        self.labelWin21.move(20, 10)
+        self.labelWin21.setFont(QFont('Mangal', 30))
+        self.labelWin21.adjustSize()
+        self.labelWin21.show()
 
         sys.exit(self.app.exec_())
 
@@ -252,41 +262,69 @@ class ConnectionWindow:
             self.label2.setStyleSheet("color : red;")
             tha.start()
 
-    def version_search(self):
+    def version_search(self) -> None:
         """
         Vérifie si le logiciel est à jour
         """
+        a = 0
+        b = 0
+
         verif = verif_ver()
-        if self.version == verif:
+
+        splited1 = verif.split(".")
+        splited2 = self.version.split(".")
+
+        for i in range(0, 3):
+            if splited1[i] == splited2[i]:
+                pass
+            elif splited1[i] > splited2[i]:
+                a = 1
+            elif splited1[i] < splited2[i]:
+                b = 1
+
+        if b == a:
             self.label3.setText("Vous êtes à jour")
             self.label3.adjustSize()
             self.label3.setStyleSheet("color: green;")
 
-        elif self.version != str(verif):
-            print(verif, self.version)
+        elif b < a:
             self.label3.setText(f"La version {verif} est disponible !")
             self.label3.adjustSize()
             self.label3.setStyleSheet("color: steelblue;")
 
+        elif b > a:
+            self.label3.move(250, 170)
+            self.label3.setText(f"Votre version ({self.version}) est une version beta !\n(Version en ligne : {verif})")
+            self.label3.setStyleSheet("color: goldenrod;")
+            self.label3.adjustSize()
+
         else:
             self.label3.setText("Impossible de vérifier les mises à jours.")
 
-    def _timer_labe2(self):
+    def _timer_labe2(self) -> None:
         """
         Permettre un affichage limité de l'étiquette de connexion
         """
         sleep(2.5)
         self.label2.setVisible(False)
 
-    def quitter():
+    def quitter(self) -> None:
+        """
+        Quitter l'application
+        """
         self.app.quit()
         QtWidgets.qApp.quit()
 
-    def register(self):
+    def register(self) -> None:
+        """
+        Ouvrir la page d'enregistrement
+        """
         try:
             self.win2.show()
         except:
-            print("Une erreur est encore survenue")
+            self.label2.setText("Une erreur est survenue")
+            threadExceptLabel2 = Thread(None, _timer_labe2)
+            threadExceptLabel2.start()
 
 # ----- Fin class principale ------
 
