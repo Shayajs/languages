@@ -1,6 +1,16 @@
 """
-Version ancienne 0.01
+Dernière version
+Informations :
+    Import total : sys, os, tkinter, threading(Thread, pickle, time(sleep), PyQt5
+    PyQt5 > QtWidjets, QtGui, QtCore(Qt)
 """
+# Version: 0.1
+# Author: Lucas Espinar
+# Copyright: Creative Common
+
+
+version = '0.1.32'
+
 
 import sys
 import os
@@ -9,7 +19,7 @@ from tkinter import Tk
 try:
     import PyQt5
 
-    os.chdir(os.path.dirname(os.path.realpath("main.py")))
+    os.chdir(os.path.dirname(os.path.realpath("main.pyw")))
     print(os.getcwd())
 except:
     print("Un problème est survenu...")
@@ -24,6 +34,11 @@ from time import sleep
 from threading import Thread
 import pickle
 
+import urllib.request
+
+
+## DEBUT PROGRAMME ------------------------------
+
 def center(x, y) -> tuple:
     """
     Permet de centrer une fenetre avec les coordonnées de x et y de la fenetre
@@ -35,12 +50,28 @@ def center(x, y) -> tuple:
     hh = (height - y) // 2
     return ww, hh
 
+def verif_ver() -> str:
+    try:
+        url = urllib.request.Request("https://raw.githubusercontent.com/Shayajs/languages/master/Python/Himeji/himeji/bin/version.vhimeji")
+        url_open = urllib.request.urlopen(url)
+        send = url_open.read().decode('utf-8')
+        send = send.split("\n")[0]
+        print(f"> Dernière version {send} <")
+        return send
+    except:
+        return None
+
+
+## DEBUT CLASS ---------------------------------
 
 class IntroWindow:
     """
     It's that first window with the lesser information. To load main project.
     """
     def __init__(self):
+        global version
+        self.version = version
+
         self.tha = Thread(None, self.chargement)
 
         self.app = QApplication(sys.argv)
@@ -55,11 +86,12 @@ class IntroWindow:
         self.pixmap = QPixmap('.\\bin\\himeji.png')
         self.label.setPixmap(self.pixmap)
         self.win.setCentralWidget(self.label)
+        self.win.setWindowIcon(QIcon("./bin/icon.png"))
         # self.win.resize(self.pixmap.width(), self.pixmap.height())
 
         self.label2 = QLabel(self.win)
-        self.label2.setText("Ouverture en cours... Veuillez Patienter        ")
-        self.label2.move(10, 320)
+        self.label2.setText("Ouverture en cours... Veuillez Patienter")
+        self.label2.move(10, 310)
         self.label2.adjustSize()
         self.label2.show()
 
@@ -67,22 +99,36 @@ class IntroWindow:
 
         self.app.exec_()
 
-    def chargement(self, time = 100):
-        a = 0
+    def chargement(self, time = 52):
+        a = "   "
+
         for i in range(time):
-            sleep(0.05)
-            a += 1
-            self.label2.setText(f"Ouverture en cours... Veuillez Patienter {a}%")
+            sleep(0.1)
+            if i % 4 == 3:
+                a = "..."
+            elif i % 4 == 2:
+                a = ".. "
+            elif i % 4 == 1:
+                a = ".  "
+            elif i % 4 == 0:
+                a = "   "
+
+            self.label2.setText(f"Version {self.version}\nVeuillez Patienter {a}")
             self.label2.adjustSize()
 
+            if i == time - 1:
+                sleep(2)
+                self.label2.setText("Ouverture en cours...")
+
         sleep(2)
-        self.label2.setText("Ouverture en cours...")
+
 
         self.win.setVisible(False)
         QtWidgets.qApp.quit()
 
 
 
+# -------- Principal -----------
 
 class ConnectionWindow:
     """
@@ -90,8 +136,12 @@ class ConnectionWindow:
     """
     def __init__(self):
         ##Variables autres
+        global version
 
+        self.version = version
         self.files_enregistrement = None
+        self.connected_one = None
+
         try:
             with open("./bin/comptes.himeji", "rb") as file:
                 depickle = pickle.Unpickler(file)
@@ -106,41 +156,58 @@ class ConnectionWindow:
         ## APPLICATION
         self.app = QApplication(sys.argv)
         self.win = QWidget()
-        x,y = 550, 300
+        x,y = 550, 320
         self.posx, self.posy = center(x, y)
         self.win.setGeometry(self.posx,self.posy,x,y)
         self.win.setWindowTitle("Page de Connexion")
         self.win.setWindowFlag(Qt.FramelessWindowHint)
+        self.win.setWindowIcon(QIcon("./bin/icon1.png"))
         self.win.show()
 
-        self.label = QLabel(self.win)
-        self.label.setText("Connexion")
-        self.label.move(20, 20)
-        self.label.setFont(QFont('Mangal', 80))
-        self.label.adjustSize()
-        self.label.show()
+        self.label1 = QLabel(self.win)
+        self.label1.setText("Connexion")
+        self.label1.move(20, 20)
+        self.label1.setFont(QFont('Mangal', 80))
+        self.label1.adjustSize()
+        self.label1.show()
+
+        self.label2 = QLabel(self.win)
+        self.label2.setText("Mauvais identifiants, réessayez.")
+        self.label2.move(260, 150)
+        self.label2.setFont(QFont('Mangal', 11))
+        self.label2.adjustSize()
+        # self.label2.show()
+
+        self.label3 = QLabel(self.win)
+        self.label3.setText("Vérification de version en cours...")
+        self.label3.move(260, 190)
+        self.label3.setFont(QFont('Mangal', 11))
+        self.label3.adjustSize()
+        self.label3.show()
+        self.threadLabel3 = Thread(None, self.version_search)
+        self.threadLabel3.start()
 
         self.champ1 = QLineEdit(self.win)
         self.champ1.move(20, 140)
-        self.champ1.resize(200, 30)
+        self.champ1.resize(220, 30)
         self.champ1.show()
 
         self.champ2 = QLineEdit(self.win)
         self.champ2.setEchoMode(QLineEdit.Password)
         self.champ2.move(20, 180)
-        self.champ2.resize(200, 30)
+        self.champ2.resize(220, 30)
         self.champ2.show()
 
         self.bouton1 = QPushButton(self.win)
-        self.bouton1.setText("Se connecter")
+        self.bouton1.setText(" Se connecter ")
         self.bouton1.move(20, 220)
         self.bouton1.setFont(QFont('Mangal', 20))
         self.bouton1.clicked.connect(self.connection)
         self.bouton1.show()
 
         self.bouton2 = QPushButton(self.win)
-        self.bouton2.setText("S'enregistrer")
-        self.bouton2.move(190, 220)
+        self.bouton2.setText(" S'enregistrer ")
+        self.bouton2.move(200, 220)
         self.bouton2.setFont(QFont('Mangal', 20))
         self.bouton2.clicked.connect(self.register)
         self.bouton2.show()
@@ -148,7 +215,7 @@ class ConnectionWindow:
         self.bouton3 = QPushButton(self.win)
         self.bouton3.setText("Fermer")
         self.bouton3.move(20, 270)
-        self.bouton3.setFont(QFont('Mangal', 20))
+        self.bouton3.setFont(QFont('Mangal', 11))
         self.bouton3.clicked.connect(self.quitter)
         self.bouton3.show()
 
@@ -160,18 +227,56 @@ class ConnectionWindow:
 
         sys.exit(self.app.exec_())
 
-    def change_label(self) -> None:
-        self.label.setText(self.champ1.text())
-        self.label.adjustSize()
-
     def connection(self) -> None:
+        """
+        Module connexion
+        """
+        tha = Thread(None, self._timer_labe2)
         try:
             if self.files_enregistrement[self.champ1.text()] and self.files_enregistrement[self.champ1.text()] == self.champ2.text() :
-                print("Connected !")
+
+                self.label2.setText("Connecté !")
+                self.label2.setStyleSheet("color : green;")
+                self.label2.adjustSize()
+                self.label2.show()
+                tha.start()
+                self.connected_one = (self.champ1.text(), True)
+
             else:
-                print("MAUVAISE CO !")
+
+                self.label2.setStyleSheet("color : red;")
+                self.label2.show()
+                tha.start()
         except:
-            print("Une erreur est survenue")
+            self.label2.show()
+            self.label2.setStyleSheet("color : red;")
+            tha.start()
+
+    def version_search(self):
+        """
+        Vérifie si le logiciel est à jour
+        """
+        verif = verif_ver()
+        if self.version == verif:
+            self.label3.setText("Vous êtes à jour")
+            self.label3.adjustSize()
+            self.label3.setStyleSheet("color: green;")
+
+        elif self.version != str(verif):
+            print(verif, self.version)
+            self.label3.setText(f"La version {verif} est disponible !")
+            self.label3.adjustSize()
+            self.label3.setStyleSheet("color: steelblue;")
+
+        else:
+            self.label3.setText("Impossible de vérifier les mises à jours.")
+
+    def _timer_labe2(self):
+        """
+        Permettre un affichage limité de l'étiquette de connexion
+        """
+        sleep(2.5)
+        self.label2.setVisible(False)
 
     def quitter():
         self.app.quit()
@@ -182,6 +287,9 @@ class ConnectionWindow:
             self.win2.show()
         except:
             print("Une erreur est encore survenue")
+
+# ----- Fin class principale ------
+
 
 app = IntroWindow()
 connexion = ConnectionWindow()
