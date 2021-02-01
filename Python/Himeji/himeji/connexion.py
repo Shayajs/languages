@@ -9,7 +9,7 @@ Informations :
 # Copyright: Creative Common
 
 
-version = '0.1.34'
+version = '0.1.35'
 
 
 import sys
@@ -19,7 +19,7 @@ from tkinter import Tk
 try:
     import PyQt5
 
-    os.chdir(os.path.dirname(os.path.realpath("connexion.py")))
+    os.chdir(os.path.dirname(os.path.realpath("connexion.pyw")))
     print(os.getcwd())
 except:
     print("Un problème est survenu...")
@@ -56,7 +56,7 @@ def verif_ver() -> str:
         url_open = urllib.request.urlopen(url)
         send = url_open.read().decode('utf-8')
         send = send.split("\n")[0]
-        print(f"> Dernière version {send} <")
+        print(f"> Dernière version en ligne {send} <")
         return send
     except:
         return None
@@ -157,6 +157,7 @@ class ConnectionWindow:
                 pickler.dump(self.files_enregistrement)
 
         ## APPLICATION
+
         self.app = QApplication(sys.argv)
         self.win = QWidget()
         x,y = 550, 320
@@ -222,7 +223,7 @@ class ConnectionWindow:
         self.bouton3.clicked.connect(self.quitter)
         self.bouton3.show()
 
-        # --------------- Page d'enregistrement
+        # --------------- Page d'enregistrement --------------
 
         self.win2 = QWidget()
         x2, y2 = 270, 400
@@ -306,8 +307,12 @@ class ConnectionWindow:
                 self.label2.show()
                 tha.start()
                 self.connected_one = (self.champ1.text(), True)
-                ThConn = Thread(None, self.quitter_timer)
-                ThConn.start()
+
+                with open("./temp/c.himeji", "wb") as connectOPEN:
+                    pick = pickle.Pickler(connectOPEN)
+                    pick.dump(self.champ1.text())
+
+                self.quitter()
 
             else:
 
@@ -366,19 +371,11 @@ class ConnectionWindow:
         sleep(2.5)
         self.label2.setVisible(False)
 
-    def quitter_timer(self) -> None:
-        """
-        Quitter l'application, mais avec Timer
-        """
-        sleep(0.5)
-        self.app.quit()
-        QtWidgets.qApp.quit()
-
     def quitter(self) -> None:
         """
         Quitter l'application
         """
-        self.app.quit()
+        # self.app.quit()
         QtWidgets.qApp.quit()
 
     def register_window(self) -> None:
@@ -397,6 +394,9 @@ class ConnectionWindow:
             threadExceptLabel2.start()
 
     def register(self):
+        """
+        Page d'enregistrement
+        """
         a = 0
         try:
             self.files_enregistrement[self.champWin21.text()]
@@ -447,6 +447,6 @@ class ConnectionWindow:
 # ----- Fin class principale ------
 
 if __name__ == "__main__":
-    app = IntroWindow()
+    # app = IntroWindow()
     connexion = ConnectionWindow()
     exit()
