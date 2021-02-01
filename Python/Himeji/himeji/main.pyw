@@ -47,7 +47,7 @@ class IntroWindow:
     It's that first window with the lesser information. To load main project.
     """
     def __init__(self):
-        self.version = "Version 0.1.30 Beta"
+        self.version = "Version 0.1.31 Beta"
 
         self.tha = Thread(None, self.chargement)
 
@@ -68,7 +68,7 @@ class IntroWindow:
 
         self.label2 = QLabel(self.win)
         self.label2.setText("Ouverture en cours... Veuillez Patienter")
-        self.label2.move(10, 300)
+        self.label2.move(10, 310)
         self.label2.adjustSize()
         self.label2.show()
 
@@ -76,16 +76,29 @@ class IntroWindow:
 
         self.app.exec_()
 
-    def chargement(self, time = 100):
-        a = 0
+    def chargement(self, time = 52):
+        a = "   "
+
         for i in range(time):
-            sleep(0.05)
-            a += 1
-            self.label2.setText(f"{self.version}\nOuverture en cours... Veuillez Patienter {a}%")
+            sleep(0.1)
+            if i % 4 == 3:
+                a = "..."
+            elif i % 4 == 2:
+                a = ".. "
+            elif i % 4 == 1:
+                a = ".  "
+            elif i % 4 == 0:
+                a = "   "
+
+            self.label2.setText(f"{self.version}\nVeuillez Patienter {a}")
             self.label2.adjustSize()
 
+            if i == time - 1:
+                sleep(2)
+                self.label2.setText("Ouverture en cours...")
+
         sleep(2)
-        self.label2.setText("Ouverture en cours...")
+
 
         self.win.setVisible(False)
         QtWidgets.qApp.quit()
