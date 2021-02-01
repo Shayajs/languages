@@ -9,7 +9,7 @@ Informations :
 # Copyright: Creative Common
 
 
-version = '0.1.33'
+version = '0.1.34'
 
 
 import sys
@@ -131,9 +131,12 @@ class IntroWindow:
 # -------- Principal -----------
 
 class ConnectionWindow:
+
     """
     Fenetre de connexion simple
     """
+
+
     def __init__(self):
         ##Variables autres
         global version
@@ -209,7 +212,7 @@ class ConnectionWindow:
         self.bouton2.setText(" S'enregistrer ")
         self.bouton2.move(200, 220)
         self.bouton2.setFont(QFont('Mangal', 20))
-        self.bouton2.clicked.connect(self.register)
+        self.bouton2.clicked.connect(self.register_window)
         self.bouton2.show()
 
         self.bouton3 = QPushButton(self.win)
@@ -219,7 +222,7 @@ class ConnectionWindow:
         self.bouton3.clicked.connect(self.quitter)
         self.bouton3.show()
 
-        # Page d'enregistrement
+        # --------------- Page d'enregistrement
 
         self.win2 = QWidget()
         x2, y2 = 270, 400
@@ -234,6 +237,58 @@ class ConnectionWindow:
         self.labelWin21.setFont(QFont('Mangal', 30))
         self.labelWin21.adjustSize()
         self.labelWin21.show()
+
+        self.labelWin22 = QLabel(self.win2)
+        self.labelWin22.setText("Nouveau nom d'utilisateur")
+        self.labelWin22.move(20, 70)
+        self.labelWin22.setFont(QFont('Mangal', 12))
+        self.labelWin22.adjustSize()
+        self.labelWin22.show()
+
+        self.champWin21 = QLineEdit(self.win2)
+        self.champWin21.setText("username")
+        self.champWin21.move(20, 90)
+        self.champWin21.resize(220, 30)
+        self.champWin21.show()
+
+        self.labelWin23 = QLabel(self.win2)
+        self.labelWin23.setText("Mot de passe")
+        self.labelWin23.move(20, 130)
+        self.labelWin23.setFont(QFont('Mangal', 12))
+        self.labelWin23.adjustSize()
+        self.labelWin23.show()
+
+        self.champWin22 = QLineEdit(self.win2)
+        self.champWin22.setEchoMode(QLineEdit.Password)
+        self.champWin22.move(20, 150)
+        self.champWin22.resize(220, 30)
+        self.champWin22.show()
+
+        self.labelWin24 = QLabel(self.win2)
+        self.labelWin24.setText("Retapez le mot de passe")
+        self.labelWin24.move(20, 190)
+        self.labelWin24.setFont(QFont('Mangal', 12))
+        self.labelWin24.adjustSize()
+        self.labelWin24.show()
+
+        self.champWin23 = QLineEdit(self.win2)
+        self.champWin23.setEchoMode(QLineEdit.Password)
+        self.champWin23.move(20, 210)
+        self.champWin23.resize(220, 30)
+        self.champWin23.show()
+
+        self.labelWin25 = QLabel(self.win2)
+        self.labelWin25.setText("Retapez le mot de passe")
+        self.labelWin25.move(20, 250)
+        self.labelWin25.setFont(QFont('Mangal', 12))
+        self.labelWin25.adjustSize()
+
+        self.boutonWin21 = QPushButton(self.win2)
+        self.boutonWin21.setText("S'enregistrer")
+        self.boutonWin21.move(20, 300)
+        self.boutonWin21.setFont(QFont('Mangal', 13))
+        self.boutonWin21.clicked.connect(self.register)
+        self.boutonWin21.show()
 
         sys.exit(self.app.exec_())
 
@@ -257,6 +312,7 @@ class ConnectionWindow:
                 self.label2.setStyleSheet("color : red;")
                 self.label2.show()
                 tha.start()
+
         except:
             self.label2.show()
             self.label2.setStyleSheet("color : red;")
@@ -315,20 +371,72 @@ class ConnectionWindow:
         self.app.quit()
         QtWidgets.qApp.quit()
 
-    def register(self) -> None:
+    def register_window(self) -> None:
         """
         Ouvrir la page d'enregistrement
         """
         try:
             self.win2.show()
+            self.champWin21.setText("")
+            self.champWin22.setText("")
+            self.champWin23.setText("")
+            self.labelWin25.setVisible(False)
         except:
             self.label2.setText("Une erreur est survenue")
             threadExceptLabel2 = Thread(None, _timer_labe2)
             threadExceptLabel2.start()
 
+    def register(self):
+        a = 0
+        try:
+            self.files_enregistrement[self.champWin21.text()]
+            a = 1
+        except:
+            a = 2
+
+        if a == 1:
+            self.labelWin25.setText("Vous êtes déjà enregistrer !")
+            self.labelWin25.setStyleSheet("color: red;")
+            self.labelWin25.adjustSize()
+            self.labelWin25.show()
+
+        elif a == 2:
+            if self.champWin22.text() == self.champWin23.text() and (self.champWin22.text() != "" and self.champWin23.text() != ""):
+
+                self.files_enregistrement[self.champWin21.text()] = self.champWin22.text()
+
+                self.labelWin25.setText("Enregistrement en cours ...")
+
+                with open("./bin/comptes.himeji", "wb") as file:
+                    pickler = pickle.Pickler(file)
+                    pickler.dump(self.files_enregistrement)
+
+                self.labelWin25.setText("Enregistrer")
+                self.labelWin25.setStyleSheet("color: green;")
+                self.labelWin25.adjustSize()
+                self.labelWin25.show()
+
+            elif self.champWin22.text() != self.champWin23.text():
+                self.labelWin25.setText("Vous n'avez pas renseigné deux\nfois le même mot de passe !")
+                self.labelWin25.setStyleSheet("color: red;")
+                self.labelWin25.adjustSize()
+                self.labelWin25.show()
+
+            elif self.champWin22.text() == "" and self.champWin23.text() == "":
+                self.labelWin25.setText("Renseignez un mot de passe")
+                self.labelWin25.setStyleSheet("color: red;")
+                self.labelWin25.adjustSize()
+                self.labelWin25.show()
+
+            else:
+                self.labelWin25.setText("Une erreur s'est déroulée")
+                self.labelWin25.setStyleSheet("color: red;")
+                self.labelWin25.adjustSize()
+                self.labelWin25.show()
+
 # ----- Fin class principale ------
 
-
-app = IntroWindow()
-connexion = ConnectionWindow()
-exit()
+if __name__ == "__main__":
+    app = IntroWindow()
+    connexion = ConnectionWindow()
+    exit()
