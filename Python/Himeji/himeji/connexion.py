@@ -9,7 +9,7 @@ Informations :
 # Copyright: Creative Common
 
 
-version = '0.1.35'
+version = '0.1.36'
 
 
 import sys
@@ -211,7 +211,7 @@ class ConnectionWindow:
 
         self.bouton2 = QPushButton(self.win)
         self.bouton2.setText(" S'enregistrer ")
-        self.bouton2.move(200, 220)
+        self.bouton2.move(220, 220)
         self.bouton2.setFont(QFont('Mangal', 20))
         self.bouton2.clicked.connect(self.register_window)
         self.bouton2.show()
@@ -291,7 +291,7 @@ class ConnectionWindow:
         self.boutonWin21.clicked.connect(self.register)
         self.boutonWin21.show()
 
-        sys.exit(self.app.exec_())
+        self.app.exec_()
 
     def connection(self) -> None:
         """
@@ -305,12 +305,12 @@ class ConnectionWindow:
                 self.label2.setStyleSheet("color : green;")
                 self.label2.adjustSize()
                 self.label2.show()
-                tha.start()
                 self.connected_one = (self.champ1.text(), True)
 
                 with open("./temp/c.himeji", "wb") as connectOPEN:
                     pick = pickle.Pickler(connectOPEN)
                     pick.dump(self.champ1.text())
+                    connectOPEN.close()
 
                 self.quitter()
 
@@ -375,8 +375,8 @@ class ConnectionWindow:
         """
         Quitter l'application
         """
-        # self.app.quit()
-        QtWidgets.qApp.quit()
+        self.app.quit()
+        # QtWidgets.qApp.quit()
 
     def register_window(self) -> None:
         """
@@ -449,4 +449,3 @@ class ConnectionWindow:
 if __name__ == "__main__":
     # app = IntroWindow()
     connexion = ConnectionWindow()
-    exit()
