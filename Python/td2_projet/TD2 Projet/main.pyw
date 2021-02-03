@@ -2,8 +2,6 @@ import os
 from pickle import Pickler, Unpickler
 import sys
 
-os.system("python3 -m pip imstall pip --upgrade")
-
 os.chdir(os.path.dirname(os.path.realpath("main.py")))
 sys.path.append(os.path.dirname(os.path.realpath("connexion.py")))
 
@@ -15,7 +13,7 @@ except:
     from tkinter import *
     main = Tk()
 
-    label = Label(main, text = "Vous n'avez pas le module connexion.py\nou\nUne erreur autre s'est déroulée.")
+    label = Label(main, text = "Vous n'avez pas le module connexion.py\nou\nUne erreur autre s'est déroulée.\n\nCela arrive souvent avec l'installation de Conda et pip qui se gênent mutuellement")
     label.pack()
 
     main.mainloop()
