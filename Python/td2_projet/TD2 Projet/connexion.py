@@ -23,7 +23,7 @@ try:
     print(os.getcwd())
 except:
     print("Un problème est survenu...")
-    os.system("pip install PyQt5")
+    os.system("python3 -m pip install PyQt5")
 
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import *
