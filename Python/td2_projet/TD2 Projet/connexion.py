@@ -4,7 +4,7 @@ Informations :
     Import total : sys, os, tkinter, threading(Thread, pickle, time(sleep), PyQt5
     PyQt5 > QtWidjets, QtGui, QtCore(Qt)
 """
-# Version: 0.1.33
+# Version: 0.2.1
 # Author: Lucas Espinar
 # Copyright: Creative Common
 
@@ -36,6 +36,8 @@ import pickle
 
 import urllib.request
 
+with open("./bin/version.vspi", "w") as v:
+    v.write(version)
 
 ## DEBUT PROGRAMME ------------------------------
 
@@ -52,7 +54,7 @@ def center(x, y) -> tuple:
 
 def verif_ver() -> str:
     try:
-        url = urllib.request.Request("https://raw.githubusercontent.com/Shayajs/languages/master/Python/td2_projet/TD2 Projet/bin/version.vspi")
+        url = urllib.request.Request("https://raw.githubusercontent.com/Shayajs/languages/master/Python/td2_projet/TD2%20Projet/bin/version.vspi")
         url_open = urllib.request.urlopen(url)
         send = url_open.read().decode('utf-8')
         send = send.split("\n")[0]
