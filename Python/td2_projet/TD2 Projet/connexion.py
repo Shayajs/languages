@@ -17,13 +17,20 @@ import os
 from tkinter import Tk
 
 try:
-    import PyQt5
+    from PyQt5.QtCore import Qt
 
-    os.chdir(os.path.dirname(os.path.realpath("connexion.pyw")))
+    os.chdir(os.path.dirname(os.path.realpath("main.pyw")))
     print(os.getcwd())
 except:
     print("Un problème est survenu...")
     os.system("python3 -m pip install PyQt5")
+    os.system("conda install -c dsdale24 pyqt5")
+
+try:
+    import PyQt5
+except:
+    os.system("pip uninstall PyQt5 && pip uninstall PyQt5-sip && pip uninstall PyQtWebEngine")
+    os.system("pip install PyQt5 && pip install PyQt5-sip && pip install PyQtWebEngine")
 
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import *

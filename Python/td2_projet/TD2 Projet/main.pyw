@@ -2,6 +2,8 @@ import os
 from pickle import Pickler, Unpickler
 import sys
 
+os.system("python3 -m pip imstall pip --upgrade")
+
 os.chdir(os.path.dirname(os.path.realpath("main.py")))
 sys.path.append(os.path.dirname(os.path.realpath("connexion.py")))
 
