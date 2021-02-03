@@ -430,7 +430,7 @@ class ConnectionWindow:
             a = 2
 
         if a == 1:
-            self.labelWin25.setText("Ce compte est déjà enregistrer !")
+            self.labelWin25.setText("Ce compte est déjà enregistré !")
             self.labelWin25.setStyleSheet("color: red;")
             self.labelWin25.adjustSize()
             self.labelWin25.show()
@@ -446,7 +446,7 @@ class ConnectionWindow:
                     pickler = pickle.Pickler(file)
                     pickler.dump(self.files_enregistrement)
 
-                self.labelWin25.setText("Enregistrer")
+                self.labelWin25.setText("Enregistré")
                 self.labelWin25.setStyleSheet("color: green;")
                 self.labelWin25.adjustSize()
                 self.labelWin25.show()
@@ -465,7 +465,7 @@ class ConnectionWindow:
 
             else:
                 self.labelWin25.setText("Une erreur s'est déroulée")
-                self.labelWin25.setStyleSheet("color: red;")
+                self.labelWin25.setStyleSheet("color: steelblue;")
                 self.labelWin25.adjustSize()
                 self.labelWin25.show()
 
