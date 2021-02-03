@@ -9,7 +9,7 @@ Informations :
 # Copyright: Creative Common
 
 
-version = '0.1.36'
+version = '0.2.1'
 
 
 import sys
@@ -297,6 +297,18 @@ class ConnectionWindow:
         """
         Module connexion
         """
+        admin = False
+        admin_list = None
+
+        try:
+            with open("./bin/admin.himeji", "rb") as adm:
+                pic = pickle.Unpickler(adm)
+                admin_list = pic.load()
+        except:
+            with open("./bin/admin.himeji", "wb") as adm:
+                pic = pickle.Pickler(adm)
+                pic.dump(["uadmin", "Shayajs"])
+
         tha = Thread(None, self._timer_labe2)
         try:
             if self.files_enregistrement[self.champ1.text()] and self.files_enregistrement[self.champ1.text()] == self.champ2.text() :
@@ -312,12 +324,17 @@ class ConnectionWindow:
                 else:
                     os.mkdir("temp")
 
+                if self.champ1.text() in admin_list:
+                    admin = True
+
                 with open("./temp/c.himeji", "wb") as connectOPEN:
+                    current = {"user": self.champ1.text(), "admin":admin}
                     pick = pickle.Pickler(connectOPEN)
-                    pick.dump(self.champ1.text())
+                    pick.dump(current)
                     connectOPEN.close()
 
                 self.quitter()
+                self.win.setVisible(False)
 
             else:
 
@@ -347,8 +364,10 @@ class ConnectionWindow:
                 pass
             elif splited1[i] > splited2[i]:
                 a = 1
+                break
             elif splited1[i] < splited2[i]:
                 b = 1
+                break
 
         if b == a:
             self.label3.setText("Vous êtes à jour")
@@ -375,6 +394,7 @@ class ConnectionWindow:
         """
         sleep(2.5)
         self.label2.setVisible(False)
+        self.win2.setVisible(False)
 
     def quitter(self) -> None:
         """
@@ -410,7 +430,7 @@ class ConnectionWindow:
             a = 2
 
         if a == 1:
-            self.labelWin25.setText("Vous êtes déjà enregistrer !")
+            self.labelWin25.setText("Ce compte est déjà enregistrer !")
             self.labelWin25.setStyleSheet("color: red;")
             self.labelWin25.adjustSize()
             self.labelWin25.show()
@@ -455,6 +475,9 @@ if __name__ == "__main__":
     # app = IntroWindow()
     connexion = ConnectionWindow()
     sleep(2)
-    os.remove("./temp/c.himeji")
-    os.rmdir("temp")
+    try:
+        os.remove("./temp/c.himeji")
+        os.rmdir("temp")
+    except:
+        print("Vous avez fermé la fenêtre avant de vous connecter")
     exit()
