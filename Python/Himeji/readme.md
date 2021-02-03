@@ -1,5 +1,5 @@
 # Bienvenu dans Himeji Application !
-## Version 0.1.36 Beta
+## Version 0.2.1 Beta
 
 Premièrement, si vous voulez tester mon programme, il vous faut Python et surtout, pendant l'installation, ne pas oublier de cocher "ADD PYTHON TO PATH" sinon, la suite risque d'être compliqué
 
