@@ -57,6 +57,41 @@ def center(x, y) -> tuple:
     hh = (height - y) // 2
     return ww, hh
 
-if __name__ == "__main__":
-    sender = Recver()
-    sender.recvtd2()
+def setBackgroundColor(choice: int) -> None:
+    """
+    choice = 1 -> Background Color = #333d40
+    choice = 2 -> No Background Color
+    """
+
+    if choice == 1:
+        with open("bin/bckcolor", "w") as seter:
+            seter.write("background-color: #333d40;")
+            print("mode sombre")
+    
+    elif choice == 2:
+        with open("bin/bckcolor", "w") as seter:
+            print("mode clair")
+            seter.write("")
+
+
+def getBackgroundColor() -> str:
+    try:
+        with open("bin/bckcolor", "r") as seter:
+            return seter.read()
+    except:
+        open("bin/bckcolor", "w").close()
+        return ""
+
+def choicedBackgroundColor() -> int:
+    try:
+        with open("bin/bckcolor", "r") as seter:
+            if seter.read() == "background-color: #333d40;":
+                
+                return 1
+            
+            else:
+                
+                return 2
+    except:
+        open("bin/bckcolor", "w").close()
+        return 2

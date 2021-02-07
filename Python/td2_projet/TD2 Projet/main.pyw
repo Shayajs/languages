@@ -5,6 +5,15 @@ import sys
 os.chdir(os.path.dirname(os.path.realpath("main.py")))
 sys.path.append(os.path.dirname(os.path.realpath("connexion.py")))
 
+"""
+Binevenue dans le module principal
+Etape 0 -> Importer Modules importants
+Etape 1 -> Fenêtre de présentation
+Etape 2 -> Fenetre de connexion
+Etape 3 -> Fenêtre principale /!\ Le faire quitter éteint l'application
+"""
+
+# Etaope 0
 try:
     from connexion import *
     from module.welcome import *
@@ -34,12 +43,4 @@ except:
     exit()
 
 # Etape 3
-winWelcome = WelcomeWindow(user["user"], user["admin"], winConnect.version)
-
-try:
-    os.remove("./temp/c.spi")
-    os.rmdir("temp")
-except:
-    pass
-
-sys.exit(winWelcome.app.exec_)
+winWelcome = WelcomeWindow(user["user"], user["admin"], winConnect.version) # sys.exit

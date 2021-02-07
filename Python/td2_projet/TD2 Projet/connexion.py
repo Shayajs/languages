@@ -4,12 +4,12 @@ Informations :
     Import total : sys, os, tkinter, threading(Thread, pickle, time(sleep), PyQt5
     PyQt5 > QtWidjets, QtGui, QtCore(Qt)
 """
-# Version: 0.2.3
+# Version: 0.2.4
 # Author: Lucas Espinar
 # Copyright: Creative Common
 
 
-version = '0.2.3'
+version = '0.2.4'
 
 
 import sys
@@ -40,11 +40,10 @@ import sys
 from time import sleep
 from threading import Thread
 import pickle
-import socket
 
 import urllib.request
 
-from module.util import Recver, center
+from module.util import Recver, center, getBackgroundColor, choicedBackgroundColor
 
 with open("./bin/version.vspi", "w") as v:
     v.write(version)
@@ -137,13 +136,19 @@ class IntroWindow:
 class ConnectionWindow:
 
     """
-    Fenetre de connexion simple
+    Fenetre de connexion en local. Impossible pour le moment de se connecter à un réseau
+    et de s'enregistrer dedans 
     """
 
 
     def __init__(self):
-        ##Variables autres
+        ## Variables autres -----------------------
         global version
+
+        self.colorText = "color: black;"
+
+        if choicedBackgroundColor() == 1:
+            self.colorText = "color: white;"
 
         self.version = version
         self.files_enregistrement = None
@@ -160,7 +165,7 @@ class ConnectionWindow:
                 pickler = pickle.Pickler(file)
                 pickler.dump(self.files_enregistrement)
 
-        ## APPLICATION
+        ## APPLICATION ----------------------------
 
         self.app = QApplication(sys.argv)
         self.win = QWidget()
@@ -172,10 +177,17 @@ class ConnectionWindow:
         self.win.setWindowIcon(QIcon("./bin/icon1.png"))
         self.win.show()
 
+        self.label0 = QLabel(self.win)
+        self.label0.move(0,0)
+        self.label0.resize(x, y)
+        self.label0.setStyleSheet(getBackgroundColor())
+        self.label0.show()
+
         self.label1 = QLabel(self.win)
         self.label1.setText("Connexion")
         self.label1.move(20, 20)
         self.label1.setFont(QFont('Mangal', 80))
+        self.label1.setStyleSheet(self.colorText)
         self.label1.adjustSize()
         self.label1.show()
 
@@ -190,6 +202,7 @@ class ConnectionWindow:
         self.label3.setText("Vérification de version en cours...")
         self.label3.move(260, 190)
         self.label3.setFont(QFont('Mangal', 11))
+        self.label3.setStyleSheet(self.colorText)
         self.label3.adjustSize()
         self.label3.show()
         self.threadLabel3 = Thread(None, self.version_search)
@@ -198,11 +211,13 @@ class ConnectionWindow:
         self.champ1 = QLineEdit(self.win)
         self.champ1.move(20, 140)
         self.champ1.resize(220, 30)
+        self.champ1.setFont(QFont('Mangal', 15))
         self.champ1.show()
 
         self.champ2 = QLineEdit(self.win)
         self.champ2.setEchoMode(QLineEdit.Password)
         self.champ2.move(20, 180)
+        self.champ2.setFont(QFont('Mangal', 15))
         self.champ2.resize(220, 30)
         self.champ2.show()
 
@@ -231,6 +246,7 @@ class ConnectionWindow:
         self.bouton4.setText("Télécharger ?")
         self.bouton4.move(400, 220)
         self.bouton4.setFont(QFont('Mangal', 20))
+        self.bouton4.setStyleSheet(self.colorText)
         self.bouton4.clicked.connect(self.updateDownload)
 
         # --------------- Page d'enregistrement --------------
