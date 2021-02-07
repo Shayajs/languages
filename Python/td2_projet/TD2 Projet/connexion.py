@@ -4,12 +4,12 @@ Informations :
     Import total : sys, os, tkinter, threading(Thread, pickle, time(sleep), PyQt5
     PyQt5 > QtWidjets, QtGui, QtCore(Qt)
 """
-# Version: 0.2.1
+# Version: 0.2.3
 # Author: Lucas Espinar
 # Copyright: Creative Common
 
 
-version = '0.2.1'
+version = '0.2.3'
 
 
 import sys
@@ -23,6 +23,7 @@ try:
     print(os.getcwd())
 except:
     print("Un problème est survenu...")
+    os.system("python3 -m pip imstall pip --upgrade")
     os.system("python3 -m pip install PyQt5")
     os.system("conda install -c dsdale24 pyqt5")
 
@@ -32,32 +33,23 @@ except:
     os.system("pip uninstall PyQt5 && pip uninstall PyQt5-sip && pip uninstall PyQtWebEngine")
     os.system("pip install PyQt5 && pip install PyQt5-sip && pip install PyQtWebEngine")
 
-from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMainWindow,qApp
+from PyQt5.QtGui import QFont, QIcon, QPixmap
 from PyQt5.QtCore import Qt
 import sys
 from time import sleep
 from threading import Thread
 import pickle
+import socket
 
 import urllib.request
+
+from module.util import Recver, center
 
 with open("./bin/version.vspi", "w") as v:
     v.write(version)
 
 ## DEBUT PROGRAMME ------------------------------
-
-def center(x, y) -> tuple:
-    """
-    Permet de centrer une fenetre avec les coordonnées de x et y de la fenetre
-    """
-    calc = Tk()
-    width = calc.winfo_screenwidth()
-    height = calc.winfo_screenheight()
-    ww = (width - x) // 2
-    hh = (height - y) // 2
-    return ww, hh
 
 def verif_ver() -> str:
     try:
@@ -111,6 +103,7 @@ class IntroWindow:
         self.app.exec_()
 
     def chargement(self, time = 52):
+
         a = "   "
 
         for i in range(time):
@@ -135,7 +128,7 @@ class IntroWindow:
 
 
         self.win.setVisible(False)
-        QtWidgets.qApp.quit()
+        qApp.quit()
 
 
 
@@ -233,6 +226,12 @@ class ConnectionWindow:
         self.bouton3.setFont(QFont('Mangal', 11))
         self.bouton3.clicked.connect(self.quitter)
         self.bouton3.show()
+
+        self.bouton4 = QPushButton(self.win)
+        self.bouton4.setText("Télécharger ?")
+        self.bouton4.move(400, 220)
+        self.bouton4.setFont(QFont('Mangal', 20))
+        self.bouton4.clicked.connect(self.updateDownload)
 
         # --------------- Page d'enregistrement --------------
 
@@ -390,6 +389,7 @@ class ConnectionWindow:
                 self.label3.setText(f"La version {verif} est disponible !")
                 self.label3.adjustSize()
                 self.label3.setStyleSheet("color: steelblue;")
+                self.bouton4.show()
 
             elif b > a:
                 self.label3.move(250, 170)
@@ -430,7 +430,7 @@ class ConnectionWindow:
             self.labelWin25.setVisible(False)
         except:
             self.label2.setText("Une erreur est survenue")
-            threadExceptLabel2 = Thread(None, _timer_labe2)
+            threadExceptLabel2 = Thread(None, self._timer_labe2)
             threadExceptLabel2.start()
 
     def register(self):
@@ -483,6 +483,34 @@ class ConnectionWindow:
                 self.labelWin25.setStyleSheet("color: steelblue;")
                 self.labelWin25.adjustSize()
                 self.labelWin25.show()
+
+    def updateThread(self):
+
+        self.champ1.setVisible(False)
+        self.champ2.setVisible(False)
+        self.bouton4.setVisible(False)
+        self.label3.setText("Téléchargement en cours...")
+        self.label3.setFont(QFont('Mangal', 30))
+        self.label3.move(30, 140)
+        self.label3.adjustSize()
+        self.bouton1.setVisible(False)
+        self.bouton2.setVisible(False)
+
+    def updateStateTwo(self):
+        self.label3.setText("Installation en cours")
+
+    def updateDownload(self):
+
+        sender = Recver()
+        tha = Thread(None, self.updateThread)
+        tha.start()
+        thb = Thread(None, sender.recvtd2, None, (self.label3,))
+
+        try:
+            thb.start()
+        except:
+            self.label3.setStyleSheet("color: red;")
+            self.label3.setText("Le serveur est down")
 
 # ----- Fin class principale ------
 
