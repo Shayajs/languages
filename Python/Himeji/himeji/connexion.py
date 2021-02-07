@@ -4,12 +4,12 @@ Informations :
     Import total : sys, os, tkinter, threading(Thread, pickle, time(sleep), PyQt5
     PyQt5 > QtWidjets, QtGui, QtCore(Qt)
 """
-# Version: 0.1.33
+# Version: 0.2.3
 # Author: Lucas Espinar
 # Copyright: Creative Common
 
 
-version = '0.2.1'
+version = '0.2.3'
 
 
 import sys
@@ -17,42 +17,43 @@ import os
 from tkinter import Tk
 
 try:
-    import PyQt5
+    from PyQt5.QtCore import Qt
 
-    os.chdir(os.path.dirname(os.path.realpath("connexion.pyw")))
+    os.chdir(os.path.dirname(os.path.realpath("main.pyw")))
     print(os.getcwd())
 except:
     print("Un problème est survenu...")
-    os.system("pip install PyQt5")
+    os.system("python3 -m pip imstall pip --upgrade")
+    os.system("python3 -m pip install PyQt5")
+    os.system("conda install -c dsdale24 pyqt5")
 
-from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
+try:
+    import PyQt5
+except:
+    os.system("pip uninstall PyQt5 && pip uninstall PyQt5-sip && pip uninstall PyQtWebEngine")
+    os.system("pip install PyQt5 && pip install PyQt5-sip && pip install PyQtWebEngine")
+
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMainWindow,qApp
+from PyQt5.QtGui import QFont, QIcon, QPixmap
 from PyQt5.QtCore import Qt
 import sys
 from time import sleep
 from threading import Thread
 import pickle
+import socket
 
 import urllib.request
 
+from module.util import Recver, center
+
+with open("./bin/version.vspi", "w") as v:
+    v.write(version)
 
 ## DEBUT PROGRAMME ------------------------------
 
-def center(x, y) -> tuple:
-    """
-    Permet de centrer une fenetre avec les coordonnées de x et y de la fenetre
-    """
-    calc = Tk()
-    width = calc.winfo_screenwidth()
-    height = calc.winfo_screenheight()
-    ww = (width - x) // 2
-    hh = (height - y) // 2
-    return ww, hh
-
 def verif_ver() -> str:
     try:
-        url = urllib.request.Request("https://raw.githubusercontent.com/Shayajs/languages/master/Python/Himeji/himeji/bin/version.vhimeji")
+        url = urllib.request.Request("https://raw.githubusercontent.com/Shayajs/languages/master/Python/td2_projet/TD2%20Projet/bin/version.vspi")
         url_open = urllib.request.urlopen(url)
         send = url_open.read().decode('utf-8')
         send = send.split("\n")[0]
@@ -79,19 +80,21 @@ class IntroWindow:
         x, y = 800, 350
         self.pos = center(x, y)
         self.win.setGeometry(self.pos[0],self.pos[1],x,y)
-        self.win.setWindowTitle("Himeji")
+        self.win.setWindowTitle("TD2 Projects")
         self.win.setWindowFlag(Qt.FramelessWindowHint)
         self.win.show()
         self.label = QLabel(self.win)
-        self.pixmap = QPixmap('.\\bin\\himeji.png')
+        self.pixmap = QPixmap('.\\bin\\intro.png')
         self.label.setPixmap(self.pixmap)
         self.win.setCentralWidget(self.label)
         self.win.setWindowIcon(QIcon("./bin/icon.png"))
         # self.win.resize(self.pixmap.width(), self.pixmap.height())
 
         self.label2 = QLabel(self.win)
+        self.label2.setFont(QFont('Mangal', 11))
+        self.label2.setStyleSheet("color: white; font-weight: bold;")
         self.label2.setText("Ouverture en cours... Veuillez Patienter")
-        self.label2.move(10, 310)
+        self.label2.move(10, 295)
         self.label2.adjustSize()
         self.label2.show()
 
@@ -100,6 +103,7 @@ class IntroWindow:
         self.app.exec_()
 
     def chargement(self, time = 52):
+
         a = "   "
 
         for i in range(time):
@@ -124,7 +128,7 @@ class IntroWindow:
 
 
         self.win.setVisible(False)
-        QtWidgets.qApp.quit()
+        qApp.quit()
 
 
 
@@ -146,12 +150,12 @@ class ConnectionWindow:
         self.connected_one = None
 
         try:
-            with open("./bin/comptes.himeji", "rb") as file:
+            with open("./bin/comptes.spi", "rb") as file:
                 depickle = pickle.Unpickler(file)
                 self.files_enregistrement = depickle.load()
 
         except:
-            with open("./bin/comptes.himeji", "wb") as file:
+            with open("./bin/comptes.spi", "wb") as file:
                 self.files_enregistrement = {"uadmin":"padmin"}
                 pickler = pickle.Pickler(file)
                 pickler.dump(self.files_enregistrement)
@@ -222,6 +226,12 @@ class ConnectionWindow:
         self.bouton3.setFont(QFont('Mangal', 11))
         self.bouton3.clicked.connect(self.quitter)
         self.bouton3.show()
+
+        self.bouton4 = QPushButton(self.win)
+        self.bouton4.setText("Télécharger ?")
+        self.bouton4.move(400, 220)
+        self.bouton4.setFont(QFont('Mangal', 20))
+        self.bouton4.clicked.connect(self.updateDownload)
 
         # --------------- Page d'enregistrement --------------
 
@@ -301,11 +311,11 @@ class ConnectionWindow:
         admin_list = None
 
         try:
-            with open("./bin/admin.himeji", "rb") as adm:
+            with open("./bin/admin.spi", "rb") as adm:
                 pic = pickle.Unpickler(adm)
                 admin_list = pic.load()
         except:
-            with open("./bin/admin.himeji", "wb") as adm:
+            with open("./bin/admin.spi", "wb") as adm:
                 pic = pickle.Pickler(adm)
                 pic.dump(["uadmin", "Shayajs"])
 
@@ -327,7 +337,7 @@ class ConnectionWindow:
                 if self.champ1.text() in admin_list:
                     admin = True
 
-                with open("./temp/c.himeji", "wb") as connectOPEN:
+                with open("./temp/c.spi", "wb") as connectOPEN:
                     current = {"user": self.champ1.text(), "admin":admin}
                     pick = pickle.Pickler(connectOPEN)
                     pick.dump(current)
@@ -354,39 +364,44 @@ class ConnectionWindow:
         a = 0
         b = 0
 
-        verif = verif_ver()
+        try:
+            verif = verif_ver()
 
-        splited1 = verif.split(".")
-        splited2 = self.version.split(".")
+            splited1 = verif.split(".")
+            splited2 = self.version.split(".")
 
-        for i in range(0, 3):
-            if splited1[i] == splited2[i]:
-                pass
-            elif splited1[i] > splited2[i]:
-                a = 1
-                break
-            elif splited1[i] < splited2[i]:
-                b = 1
-                break
+            for i in range(0, 3):
+                if splited1[i] == splited2[i]:
+                    pass
+                elif splited1[i] > splited2[i]:
+                    a = 1
+                    break
+                elif splited1[i] < splited2[i]:
+                    b = 1
+                    break
 
-        if b == a:
-            self.label3.setText("Vous êtes à jour")
-            self.label3.adjustSize()
-            self.label3.setStyleSheet("color: green;")
+            if b == a:
+                self.label3.setText("Vous êtes à jour")
+                self.label3.adjustSize()
+                self.label3.setStyleSheet("color: green;")
 
-        elif b < a:
-            self.label3.setText(f"La version {verif} est disponible !")
-            self.label3.adjustSize()
-            self.label3.setStyleSheet("color: steelblue;")
+            elif b < a:
+                self.label3.setText(f"La version {verif} est disponible !")
+                self.label3.adjustSize()
+                self.label3.setStyleSheet("color: steelblue;")
+                self.bouton4.show()
 
-        elif b > a:
-            self.label3.move(250, 170)
-            self.label3.setText(f"Votre version ({self.version}) est une version beta !\n(Version en ligne : {verif})")
-            self.label3.setStyleSheet("color: goldenrod;")
-            self.label3.adjustSize()
+            elif b > a:
+                self.label3.move(250, 170)
+                self.label3.setText(f"Votre version ({self.version}) est une version beta !\n(Version en ligne : {verif})")
+                self.label3.setStyleSheet("color: goldenrod;")
+                self.label3.adjustSize()
 
-        else:
+            else:
+                self.label3.setText("Impossible de vérifier les mises à jours.")
+        except:
             self.label3.setText("Impossible de vérifier les mises à jours.")
+            self.label3.adjustSize()
 
     def _timer_labe2(self) -> None:
         """
@@ -415,7 +430,7 @@ class ConnectionWindow:
             self.labelWin25.setVisible(False)
         except:
             self.label2.setText("Une erreur est survenue")
-            threadExceptLabel2 = Thread(None, _timer_labe2)
+            threadExceptLabel2 = Thread(None, self._timer_labe2)
             threadExceptLabel2.start()
 
     def register(self):
@@ -442,7 +457,7 @@ class ConnectionWindow:
 
                 self.labelWin25.setText("Enregistrement en cours ...")
 
-                with open("./bin/comptes.himeji", "wb") as file:
+                with open("./bin/comptes.spi", "wb") as file:
                     pickler = pickle.Pickler(file)
                     pickler.dump(self.files_enregistrement)
 
@@ -469,6 +484,34 @@ class ConnectionWindow:
                 self.labelWin25.adjustSize()
                 self.labelWin25.show()
 
+    def updateThread(self):
+
+        self.champ1.setVisible(False)
+        self.champ2.setVisible(False)
+        self.bouton4.setVisible(False)
+        self.label3.setText("Téléchargement en cours...")
+        self.label3.setFont(QFont('Mangal', 30))
+        self.label3.move(30, 140)
+        self.label3.adjustSize()
+        self.bouton1.setVisible(False)
+        self.bouton2.setVisible(False)
+
+    def updateStateTwo(self):
+        self.label3.setText("Installation en cours")
+
+    def updateDownload(self):
+
+        sender = Recver()
+        tha = Thread(None, self.updateThread)
+        tha.start()
+        thb = Thread(None, sender.recvtd2, None, (self.label3,))
+
+        try:
+            thb.start()
+        except:
+            self.label3.setStyleSheet("color: red;")
+            self.label3.setText("Le serveur est down")
+
 # ----- Fin class principale ------
 
 if __name__ == "__main__":
@@ -476,7 +519,7 @@ if __name__ == "__main__":
     connexion = ConnectionWindow()
     sleep(2)
     try:
-        os.remove("./temp/c.himeji")
+        os.remove("./temp/c.spi")
         os.rmdir("temp")
     except:
         print("Vous avez fermé la fenêtre avant de vous connecter")

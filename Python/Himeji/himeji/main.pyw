@@ -1,9 +1,9 @@
 import os
-from pickle import Pickler, Unpickler
+from pickle import Unpickler
 import sys
 
 os.chdir(os.path.dirname(os.path.realpath("main.py")))
-sys.path.append(os.path.dirname(os.path.realpath("connexion.pyw")))
+sys.path.append(os.path.dirname(os.path.realpath("connexion.py")))
 
 try:
     from connexion import *
@@ -13,28 +13,33 @@ except:
     from tkinter import *
     main = Tk()
 
-    label = Label(main, text = "Vous n'avez pas le module connexion.py")
+    label = Label(main, text = "Vous n'avez pas le module connexion.py\nou\nUne erreur autre s'est déroulée.\n\nCela arrive souvent avec l'installation de Conda et pip qui se gênent mutuellement")
     label.pack()
 
     main.mainloop()
-
-
-
+    
+# Etape 1
 app = IntroWindow()
+
+# Etape 2
 winConnect = ConnectionWindow()
 
 user = None
-with open("./temp/c.himeji", "rb") as user_connect:
-    pickler = pickle.Unpickler(user_connect)
-    user = pickler.load()
-    user_connect.close()
+try:
+    with open("./temp/c.spi", "rb") as user_connect:
+        pickler = Unpickler(user_connect)
+        user = pickler.load()
+        user_connect.close()
+except:
+    exit()
 
+# Etape 3
 winWelcome = WelcomeWindow(user["user"], user["admin"], winConnect.version)
 
 try:
-    os.remove("./temp/c.himeji")
+    os.remove("./temp/c.spi")
     os.rmdir("temp")
 except:
     pass
 
-exit()
+sys.exit(winWelcome.app.exec_)

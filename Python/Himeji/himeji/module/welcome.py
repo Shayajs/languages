@@ -1,4 +1,3 @@
-from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
@@ -18,7 +17,7 @@ class WelcomeWindow:
 
 
         if __name__ != "__main__":
-            os.remove("./temp/c.himeji")
+            os.remove("./temp/c.spi")
             os.rmdir("temp")
 
         self.user = user
@@ -32,9 +31,9 @@ class WelcomeWindow:
         self.win.setGeometry(self.x, self.y, x, y)
 
         if not self.isAdmin:
-            self.win.setWindowTitle(f"Himeji — {self.user} — {self.version}")
+            self.win.setWindowTitle(f"Projets SPI — {self.user} — {self.version}")
         elif self.isAdmin:
-            self.win.setWindowTitle(f"Himeji — {self.user} — {self.version} (Administrateur)")
+            self.win.setWindowTitle(f"Projets SPI — {self.user} — {self.version} (Administrateur)")
 
         self.win.setWindowIcon(QIcon("./bin/icon1"))
         self.win.show()
