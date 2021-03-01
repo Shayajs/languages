@@ -4,38 +4,31 @@ Informations :
     Import total : sys, os, tkinter, threading(Thread, pickle, time(sleep), PyQt5
     PyQt5 > QtWidjets, QtGui, QtCore(Qt)
 """
-# Version: 0.2.4
-# Author: Lucas Espinar
+# Version: 0.3.1
+# Author: Lucas Espinar & Lysandre
 # Copyright: Creative Common
 
 
-version = '0.2.4'
+version = '0.3.1'
+
 
 
 import sys
 import os
-from tkinter import Tk
 
 try:
     from PyQt5.QtCore import Qt
 
     os.chdir(os.path.dirname(os.path.realpath("main.pyw")))
-    print(os.getcwd())
+    # print(os.getcwd())
+
 except:
+    os.system("python -m pip install PyQt5")
     print("Un problème est survenu...")
-    os.system("python3 -m pip imstall pip --upgrade")
-    os.system("python3 -m pip install PyQt5")
-    os.system("conda install -c dsdale24 pyqt5")
 
-try:
-    import PyQt5
-except:
-    os.system("pip uninstall PyQt5 && pip uninstall PyQt5-sip && pip uninstall PyQtWebEngine")
-    os.system("pip install PyQt5 && pip install PyQt5-sip && pip install PyQtWebEngine")
-
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMainWindow,qApp
-from PyQt5.QtGui import QFont, QIcon, QPixmap
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QAction, QApplication, QMenu, QRadioButton, QWidget, QLabel, QLineEdit, QPushButton, QMainWindow,qApp
+from PyQt5.QtGui import QFont, QIcon, QPixmap, QMovie
+from PyQt5.QtCore import Qt, QSize
 import sys
 from time import sleep
 from threading import Thread
@@ -43,10 +36,15 @@ import pickle
 
 import urllib.request
 
-from module.util import Recver, center, getBackgroundColor, choicedBackgroundColor
-
-with open("./bin/version.vspi", "w") as v:
-    v.write(version)
+from module.util import Donnees, Online, Recver, exceptionRaised, center, getBackgroundColor, choicedBackgroundColor
+try:
+    with open("./bin/version.vspi", "w") as v:
+        v.write(version)
+        Donnees.version = version
+except:
+   with open("version.vspi", "w") as v:
+        v.write(version)
+        Donnees.version = version    
 
 ## DEBUT PROGRAMME ------------------------------
 
@@ -81,13 +79,16 @@ class IntroWindow:
         self.win.setGeometry(self.pos[0],self.pos[1],x,y)
         self.win.setWindowTitle("TD2 Projects")
         self.win.setWindowFlag(Qt.FramelessWindowHint)
+        self.win.setWindowIcon(QIcon("./bin/icon.png"))
         self.win.show()
         self.label = QLabel(self.win)
-        self.pixmap = QPixmap('.\\bin\\intro.png')
-        self.label.setPixmap(self.pixmap)
+
+        self.movie = QMovie("./bin/intro.gif")
+
+        self.label.setMovie(self.movie)
+        self.movie.start()
+
         self.win.setCentralWidget(self.label)
-        self.win.setWindowIcon(QIcon("./bin/icon.png"))
-        # self.win.resize(self.pixmap.width(), self.pixmap.height())
 
         self.label2 = QLabel(self.win)
         self.label2.setFont(QFont('Mangal', 11))
@@ -101,7 +102,7 @@ class IntroWindow:
 
         self.app.exec_()
 
-    def chargement(self, time = 52):
+    def chargement(self, time = 15):
 
         a = "   "
 
@@ -120,17 +121,14 @@ class IntroWindow:
             self.label2.adjustSize()
 
             if i == time - 1:
-                sleep(2)
+                sleep(0.5)
                 self.label2.setText("Ouverture en cours...")
 
-        sleep(2)
+        sleep(1)
 
 
         self.win.setVisible(False)
         qApp.quit()
-
-
-
 # -------- Principal -----------
 
 class ConnectionWindow:
@@ -139,13 +137,15 @@ class ConnectionWindow:
     Fenetre de connexion en local. Impossible pour le moment de se connecter à un réseau
     et de s'enregistrer dedans 
     """
-
+    current_user = None
 
     def __init__(self):
         ## Variables autres -----------------------
         global version
 
-        self.colorText = "color: black;"
+        self.colorText = ""
+        if sys.platform == "win32":
+            self.colorText = "color: #334d9b"
 
         if choicedBackgroundColor() == 1:
             self.colorText = "color: white;"
@@ -154,27 +154,34 @@ class ConnectionWindow:
         self.files_enregistrement = None
         self.connected_one = None
 
+        self.ftp = Online()
+        # self.ftp.downloadftp("comptes.spi")
+        
+        self.ftp.downloadftp("admin.spi")
+
         try:
             with open("./bin/comptes.spi", "rb") as file:
                 depickle = pickle.Unpickler(file)
                 self.files_enregistrement = depickle.load()
+                Donnees.comptes = self.files_enregistrement
 
         except:
             with open("./bin/comptes.spi", "wb") as file:
-                self.files_enregistrement = {"uadmin":"padmin"}
                 pickler = pickle.Pickler(file)
-                pickler.dump(self.files_enregistrement)
+                pickler.dump({"uadmin": "padmin"})
+                Donnees.comptes, self.files_enregistrement = {"uadmin": "padmin"}
 
         ## APPLICATION ----------------------------
 
         self.app = QApplication(sys.argv)
         self.win = QWidget()
-        x,y = 550, 320
+        x,y = 650, 320
         self.posx, self.posy = center(x, y)
         self.win.setGeometry(self.posx,self.posy,x,y)
         self.win.setWindowTitle("Page de Connexion")
         self.win.setWindowFlag(Qt.FramelessWindowHint)
         self.win.setWindowIcon(QIcon("./bin/icon1.png"))
+
         self.win.show()
 
         self.label0 = QLabel(self.win)
@@ -184,8 +191,8 @@ class ConnectionWindow:
         self.label0.show()
 
         self.label1 = QLabel(self.win)
-        self.label1.setText("Connexion")
-        self.label1.move(20, 20)
+        self.label1.setText("Choix")
+        self.label1.move(20, 10)
         self.label1.setFont(QFont('Mangal', 80))
         self.label1.setStyleSheet(self.colorText)
         self.label1.adjustSize()
@@ -200,7 +207,7 @@ class ConnectionWindow:
 
         self.label3 = QLabel(self.win)
         self.label3.setText("Vérification de version en cours...")
-        self.label3.move(260, 190)
+        self.label3.move(20, 190)
         self.label3.setFont(QFont('Mangal', 11))
         self.label3.setStyleSheet(self.colorText)
         self.label3.adjustSize()
@@ -212,34 +219,39 @@ class ConnectionWindow:
         self.champ1.move(20, 140)
         self.champ1.resize(220, 30)
         self.champ1.setFont(QFont('Mangal', 15))
-        self.champ1.show()
+        # self.champ1.show()
 
         self.champ2 = QLineEdit(self.win)
         self.champ2.setEchoMode(QLineEdit.Password)
         self.champ2.move(20, 180)
         self.champ2.setFont(QFont('Mangal', 15))
         self.champ2.resize(220, 30)
-        self.champ2.show()
+        # self.champ2.show()
 
         self.bouton1 = QPushButton(self.win)
         self.bouton1.setText(" Se connecter ")
         self.bouton1.move(20, 220)
         self.bouton1.setFont(QFont('Mangal', 20))
         self.bouton1.clicked.connect(self.connection)
-        self.bouton1.show()
+
+        self.openAction = QAction("&ouvrir", self.win)
+        self.openAction.setShortcut("Return")
+        self.openAction.triggered.connect(self.connection)
+        self.win.addAction(self.openAction)
+        # self.bouton1.show()
 
         self.bouton2 = QPushButton(self.win)
         self.bouton2.setText(" S'enregistrer ")
         self.bouton2.move(220, 220)
         self.bouton2.setFont(QFont('Mangal', 20))
         self.bouton2.clicked.connect(self.register_window)
-        self.bouton2.show()
+        # self.bouton2.show()
 
         self.bouton3 = QPushButton(self.win)
         self.bouton3.setText("Fermer")
         self.bouton3.move(20, 270)
         self.bouton3.setFont(QFont('Mangal', 11))
-        self.bouton3.clicked.connect(self.quitter)
+        self.bouton3.clicked.connect(self.quitterNet)
         self.bouton3.show()
 
         self.bouton4 = QPushButton(self.win)
@@ -248,6 +260,22 @@ class ConnectionWindow:
         self.bouton4.setFont(QFont('Mangal', 20))
         self.bouton4.setStyleSheet(self.colorText)
         self.bouton4.clicked.connect(self.updateDownload)
+
+        self.radio1 = QRadioButton(self.win)
+        self.radio1.setText("En Ligne")
+        self.radio1.move(120, 275)
+        self.radio1.setStyleSheet(self.colorText)
+        self.radio1.adjustSize()
+        self.radio1.toggled.connect(self.onlineOrNot)
+        self.radio1.show()
+
+        self.radio2 = QRadioButton(self.win)
+        self.radio2.setText("Hors Ligne")
+        self.radio2.move(200, 275)
+        self.radio2.setStyleSheet(self.colorText)
+        self.radio2.adjustSize()
+        self.radio2.toggled.connect(self.onlineOrNot)
+        self.radio2.show()
 
         # --------------- Page d'enregistrement --------------
 
@@ -319,59 +347,93 @@ class ConnectionWindow:
 
         self.app.exec_()
 
+    def onlineOrNot(self) -> None:
+        if Donnees.online_final == False:
+            self.radio1.setCheckable(False)
+            self.radio1.setStyleSheet("color : red;")
+
+
+        if self.radio1.isChecked():
+            
+            self.bouton2.show()
+            self.bouton1.show()
+            self.label1.setText("Connexion")
+            self.label1.adjustSize()
+            self.bouton1.setText(" Se connecter ")
+            self.bouton1.adjustSize()
+            self.bouton2.setVisible(True)
+            self.champ1.setVisible(True)
+            self.champ2.setVisible(True)
+            self.label3.setVisible(True)
+            self.label3.move(250, 170)
+            self.label3.show()
+            Donnees.online = True
+            self.ftp.downloadftp("comptes.spi")
+        
+        elif self.radio2.isChecked():
+
+            self.label1.setText("Offline")
+            self.label1.adjustSize()
+            self.bouton1.setText(" Se connecter Hors Ligne ")
+            self.bouton1.show()
+            self.bouton1.adjustSize()
+            self.bouton2.setVisible(False)
+            self.champ1.setVisible(False)
+            self.champ2.setVisible(False)
+            self.label3.setVisible(False)
+
+            Donnees.online = False
+
     def connection(self) -> None:
         """
         Module connexion
         """
         admin = False
         admin_list = None
+        if self.radio1.isChecked():
+            try:
+                with open("./bin/admin.spi", "rb") as adm:
+                    pic = pickle.Unpickler(adm)
+                    admin_list = pic.load()
+                    Donnees.admin = admin_list
+            except:
+                with open("./bin/admin.spi", "wb") as adm:
+                    pic = pickle.Pickler(adm)
+                    pic.dump(["uadmin", "Shayajs"])
+                    Donnees.admin = ["uadmin", "Shayajs"]
 
-        try:
-            with open("./bin/admin.spi", "rb") as adm:
-                pic = pickle.Unpickler(adm)
-                admin_list = pic.load()
-        except:
-            with open("./bin/admin.spi", "wb") as adm:
-                pic = pickle.Pickler(adm)
-                pic.dump(["uadmin", "Shayajs"])
+            tha = Thread(None, self._timer_labe2)
+            try:
+                if self.files_enregistrement[self.champ1.text()] and self.files_enregistrement[self.champ1.text()] == self.champ2.text() :
 
-        tha = Thread(None, self._timer_labe2)
-        try:
-            if self.files_enregistrement[self.champ1.text()] and self.files_enregistrement[self.champ1.text()] == self.champ2.text() :
+                    self.label2.setText("Connecté !")
+                    self.label2.setStyleSheet("color : green;")
+                    self.label2.adjustSize()
+                    self.label2.show()
+                    self.connected_one = (self.champ1.text(), True)
 
-                self.label2.setText("Connecté !")
-                self.label2.setStyleSheet("color : green;")
-                self.label2.adjustSize()
-                self.label2.show()
-                self.connected_one = (self.champ1.text(), True)
+                    if self.champ1.text() in admin_list:
+                        admin = True
 
-                if os.path.exists('./temp/'):
-                    pass
+                    Donnees.current_user = {"user": self.champ1.text(), "admin":admin}
+
+                    self.quitter()
+                    self.win.setVisible(False)
+
                 else:
-                    os.mkdir("temp")
 
-                if self.champ1.text() in admin_list:
-                    admin = True
+                    self.label2.setStyleSheet("color : red;")
+                    self.label2.show()
+                    tha.start()
 
-                with open("./temp/c.spi", "wb") as connectOPEN:
-                    current = {"user": self.champ1.text(), "admin":admin}
-                    pick = pickle.Pickler(connectOPEN)
-                    pick.dump(current)
-                    connectOPEN.close()
-
-                self.quitter()
-                self.win.setVisible(False)
-
-            else:
-
-                self.label2.setStyleSheet("color : red;")
+            except:
                 self.label2.show()
+                self.label2.setStyleSheet("color : red;")
                 tha.start()
-
-        except:
-            self.label2.show()
-            self.label2.setStyleSheet("color : red;")
-            tha.start()
+        elif self.radio2.isChecked():
+            self.quitter()
+            self.win.setVisible(False)
+            Donnees.current_user = {"user": "Hors Ligne", "admin":False}
 
     def version_search(self) -> None:
         """
@@ -387,12 +449,12 @@ class ConnectionWindow:
             splited2 = self.version.split(".")
 
             for i in range(0, 3):
-                if splited1[i] == splited2[i]:
+                if int(splited1[i]) == int(splited2[i]):
                     pass
-                elif splited1[i] > splited2[i]:
+                elif int(splited1[i]) > int(splited2[i]):
                     a = 1
                     break
-                elif splited1[i] < splited2[i]:
+                elif int(splited1[i]) < int(splited2[i]):
                     b = 1
                     break
 
@@ -408,7 +470,7 @@ class ConnectionWindow:
                 self.bouton4.show()
 
             elif b > a:
-                self.label3.move(250, 170)
+                # self.label3.move(250, 170)
                 self.label3.setText(f"Votre version ({self.version}) est une version beta !\n(Version en ligne : {verif})")
                 self.label3.setStyleSheet("color: goldenrod;")
                 self.label3.adjustSize()
@@ -431,8 +493,19 @@ class ConnectionWindow:
         """
         Quitter l'application
         """
-        self.app.quit()
-        # QtWidgets.qApp.quit()
+        self.win.setVisible(False)
+        # self.app.quit()
+        qApp.quit()
+
+    def quitterNet(self):
+        """
+        Quitter l'application
+        """
+        Donnees.current_user = {"user": None, "admin": False}
+        self.win.setVisible(False)
+        # self.app.quit()
+        qApp.quit()
+        del self
 
     def register_window(self) -> None:
         """
@@ -448,6 +521,7 @@ class ConnectionWindow:
             self.label2.setText("Une erreur est survenue")
             threadExceptLabel2 = Thread(None, self._timer_labe2)
             threadExceptLabel2.start()
+            exceptionRaised()
 
     def register(self):
         """
@@ -476,6 +550,11 @@ class ConnectionWindow:
                 with open("./bin/comptes.spi", "wb") as file:
                     pickler = pickle.Pickler(file)
                     pickler.dump(self.files_enregistrement)
+                
+                sleep(1)
+
+                Donnees.comptes = self.files_enregistrement
+                self.ftp.uploadftp("comptes.spi")
 
                 self.labelWin25.setText("Enregistré")
                 self.labelWin25.setStyleSheet("color: green;")
@@ -511,6 +590,9 @@ class ConnectionWindow:
         self.label3.adjustSize()
         self.bouton1.setVisible(False)
         self.bouton2.setVisible(False)
+        self.radio1.setVisible(False)
+        self.radio2.setVisible(False)
+        self.bouton3.setText("Annuler")
 
     def updateStateTwo(self):
         self.label3.setText("Installation en cours")
@@ -527,16 +609,18 @@ class ConnectionWindow:
         except:
             self.label3.setStyleSheet("color: red;")
             self.label3.setText("Le serveur est down")
-
+    
+    def __del__(self):
+        print("Sortie sans connexion")
 # ----- Fin class principale ------
 
 if __name__ == "__main__":
     # app = IntroWindow()
     connexion = ConnectionWindow()
+
     sleep(2)
     try:
-        os.remove("./temp/c.spi")
-        os.rmdir("temp")
+        print(Donnees.current_user)
     except:
-        print("Vous avez fermé la fenêtre avant de vous connecter")
+        print("Pas eu de connexion !")
     exit()
