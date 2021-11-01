@@ -98,9 +98,6 @@ class LoginHost:
                 Thread(None, self._thread_loop, None, (self, self.demand_start))
                 Thread.start()
                 self.open = False
-            
-        
-        print(f"Version {version}")
         
     def login(self, client: soc):
         """
