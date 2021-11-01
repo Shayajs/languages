@@ -283,7 +283,7 @@ class LoginClient:
         self.connected = False
         self.connected_client = False
         self.last_code = str()
-        self.code_retired = ["201", "202"]
+        self.code_retired = ["201", "202", "103"]
 
         
     def send(self, message: str):
@@ -358,6 +358,7 @@ class LoginClient:
         time.sleep(0.02)
         self.send(pwd)
         code = self.client.recv(8).decode()
+        self.last_code = code
         print(code)
         if code == "201":
             self.token = self.client.recv(2048).decode()
