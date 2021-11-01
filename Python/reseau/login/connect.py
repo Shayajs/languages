@@ -86,11 +86,19 @@ class LoginHost:
         self.connected = []
         self.clients = []
         
+        print(f"Version {version}")
+        
         self.looper = True
         self._thread_loop(self.demand_start)
         
-        Thread(None, self._thread_loop, None, [self, self.demand_start])
-        Thread.start()
+        self.open = True
+        self.true = True
+        while self.true:
+            if self.open:
+                Thread(None, self._thread_loop, None, (self, self.demand_start))
+                Thread.start()
+                self.open = False
+            
         
         print(f"Version {version}")
         
@@ -122,7 +130,7 @@ class LoginHost:
                     time.sleep(0.01)
                     self.client.send(token.encode())
                     if __name__ == "__main__":
-                        print(f"{user} connected !")
+                        print(f"{user} connected on {self.client.getpeername()} ({self.client.getsockname()})!")
                     
                     self.demand_connected(client)
                 
@@ -228,6 +236,8 @@ class LoginHost:
         
         if code == "002":
             self.logup(a)
+        
+        self.open = True
             
     def demand_connected(self, client: soc):
         code = client.recv(1024).decode()
@@ -316,8 +326,13 @@ class LoginClient:
                 print("Error, impossible de se connecter")
         
         if respond == "103":
-            print("Enregistrement en cours...")
-            self.logup(username=username, pwd=pwd)
+            
+            print("Vous n'êtes pas enregistré.")
+            yon = input("Voulez-vous vous enregistrer ? (O/n): ")
+            if yon.capitalize() == "O":
+                self.logup(username=username, pwd=pwd)
+            else:
+                self.client.close()
         
         if respond == "105":
             msg = self.client.recv(2048).decode()
