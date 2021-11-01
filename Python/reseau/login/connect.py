@@ -111,6 +111,10 @@ class LoginHost:
         Deux receptions, un envoi (code)
         """
         
+        with open("connexion.login", "rb") as file:
+            pic2 = Unpickler(file)
+            self.accounts = pic2.load()
+        
         self.client = client
         user = self.client.recv(1024).decode("utf-8")
         pwd_temp = self.client.recv(1024).decode("utf-8")
@@ -180,6 +184,7 @@ class LoginHost:
         tok2 = TokenTime(taille=20)
         
         username = self.client.recv(1024).decode("utf-8")
+        time.sleep(0.02)
         pwd = self.client.recv(1024).decode("utf-8")
 
         if username not in self.accounts:
@@ -189,6 +194,10 @@ class LoginHost:
                 "token": tok2.getToken()
             }
             
+            with open("connexion.login", "wb") as file:
+                picklefile = Pickler(file)
+                picklefile.dump(self.accounts)
+            
             self.client_logup.send(b"201")
             time.sleep(0.1)
             self.client_logup.send(self.accounts[username]["token"].encode())
@@ -196,6 +205,7 @@ class LoginHost:
             
         elif username in self.accounts:
             self.client_logup.send(b"202")
+            time.sleep(0.02)
             self.login(client)
         
         with open("connexion.login", "wb") as file:
@@ -237,8 +247,9 @@ class LoginHost:
         self.open = True
             
     def demand_connected(self, client: soc):
+        if __name__ == "__main__":
+            print(f"En attente de {client.getpeername()}")
         code = client.recv(1024).decode()
-        print(f"En attente de {client.getpeername()}")
         if code == "001":
             self.login(client)
         
@@ -271,6 +282,7 @@ class LoginClient:
         self.client = soc(AF_INET, SOCK_STREAM)
         self.connected = False
         self.connected_client = False
+        self.last_code = str()
 
         
     def send(self, message: str):
@@ -287,8 +299,8 @@ class LoginClient:
     def login(self, username: str, pwd: str) -> ...:
         
         self.username = username
-        
-        self.send("001")
+        if self.last_code != "202":
+            self.send("001")
         if __name__ == "__main__":
             time.sleep(0.5)
         self.send(username)
@@ -339,7 +351,7 @@ class LoginClient:
             print("Impossible de se connecter")
     
     def logup(self, username, pwd):
-        self.send("003")
+        self.send("002")
         time.sleep(0.02)
         self.send(username)
         time.sleep(0.02)
@@ -348,8 +360,10 @@ class LoginClient:
         print(code)
         if code == "201":
             self.token = self.client.recv(2048).decode()
+            self.connected_client = True
         
         if code == "202":
+            time.sleep(0.02)
             self.login(username, pwd)
     
     def logout(self):
