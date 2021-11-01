@@ -37,7 +37,7 @@ class LoginHost:
     
     def __init__(self, ip = "", port = 8081) -> None:
         
-        version = "0.1 Beta"
+        version = "0.1"
         
         try:
             with open("connexion.login", "rb") as login:
@@ -311,6 +311,7 @@ class LoginClient:
             time.sleep(0.5)
         self.send(pwd)
         respond = self.client.recv(1024).decode()
+        self.last_code = respond
         if __name__ == "__main__":
             print(respond)
         
