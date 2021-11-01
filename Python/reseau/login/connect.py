@@ -118,7 +118,9 @@ class LoginHost:
         self.client = client
         user = self.client.recv(1024).decode("utf-8")
         pwd_temp = self.client.recv(1024).decode("utf-8")
-        
+        if __name__ == "__main__":
+            print(self.accounts, user, pwd_temp)
+            
         try:
             user_temp = self.accounts[user]
             if user not in self.connected:
@@ -352,7 +354,8 @@ class LoginClient:
             print("Impossible de se connecter")
     
     def logup(self, username, pwd):
-        self.send("002")
+        if self.last_code not in self.code_retired:
+            self.send("002")
         time.sleep(0.02)
         self.send(username)
         time.sleep(0.02)
