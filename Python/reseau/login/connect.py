@@ -10,6 +10,8 @@ from pickle import Pickler, Unpickler
 import json
 from os import remove
 import time
+from sys import argv
+from threading import Thread
 
 class LoginHost:
     
@@ -33,12 +35,9 @@ class LoginHost:
         202 Already Loged up
     """
     
-    def __init__(self) -> None:
+    def __init__(self, ip = "", port = 8081) -> None:
         
-        
-        
-        with open("already.login.temp", "w"):
-            pass # Just create and reinitialization of alp
+        version = "0.1 Beta"
         
         try:
             with open("connexion.login", "rb") as login:
@@ -82,12 +81,19 @@ class LoginHost:
             self.accounts = pic2.load()
             
         self.host = soc(AF_INET, SOCK_STREAM)
-        self.host.bind(("", 8081))
+        self.host.bind((ip, port))
         self.host.listen(5)
         self.connected = []
         self.clients = []
         
-    
+        self.looper = True
+        self._thread_loop(self.demand_start)
+        
+        Thread(None, self._thread_loop, None, [self, self.demand_start])
+        Thread.start()
+        
+        print(f"Version {version}")
+        
     def login(self, client: soc):
         """
         Si code 101 :
@@ -102,34 +108,53 @@ class LoginHost:
         
         self.client = client
         user = self.client.recv(1024).decode("utf-8")
+        pwd_temp = self.client.recv(1024).decode("utf-8")
         
         try:
             user_temp = self.accounts[user]
-            pwd_temp = self.client.recv(1024).decode("utf-8")
             if user not in self.connected:
                 if pwd_temp == user_temp["pwd"]:
-                    self.connected.append("user")
+                    self.connected.append(user)
                     token_log = TokenTime(taille=20, time_out=1)
                     token = token_log.getToken()
                     self.accounts[user]["token"] = token
                     self.client.send(b"101")
                     time.sleep(0.01)
                     self.client.send(token.encode())
-            
-            elif user in self.connected:
-                self.client.send(b"102")
-                tok_temp = self.client.recv(64).decode()
-                
-                if tok_temp == self.accounts[user]["token"]:
-                    self.client.send(b"101")
+                    if __name__ == "__main__":
+                        print(f"{user} connected !")
+                    
+                    self.demand_connected(client)
                 
                 else:
                     self.client.send(b"104")
+            
+            elif user in self.connected:
+                self.client.send(b"102")
+                time.sleep(0.5)
+                tok_temp = self.client.recv(64).decode()
+                time.sleep(0.2)
+                
+                if tok_temp == self.accounts[user]["token"]:
+                    self.client.send(b"101")
+                    print(f"{user} reconnected !")
+                    self.demand_connected(client)
+                
+                elif tok_temp == "None":
+                    print(f"{user} tente de se reconnecter avec une machine différente mais n'a pas le bon token.")
+                    self.client.send(b"104")
+                
+                elif tok_temp != self.accounts[user]["token"]:
+                    self.client.send(b"104")
+                
+                else:
+                    self.client.send(b"105")
                     
             else:
                 self.client.send(b"104")
                 
         except Exception as e:
+            print(e.__traceback__, e.__str__(), e.__context__)
             if user not in self.accounts:
                 self.client.send(b"103")
                 self.logup(self.client)
@@ -139,7 +164,6 @@ class LoginHost:
             
             self.client.send(str(e).encode())
             
-        
     def logup(self, client: soc):
         """infos to send :
         username, pwd
@@ -150,24 +174,46 @@ class LoginHost:
         # One send
         tok2 = TokenTime(taille=20)
         
-        logup_infos_recv = self.client.recv(1024).decode("utf-8")
-        logup_infos = json.loads(logup_infos_recv)
-        if logup_infos["username"] not in self.accounts:
-            self.accounts[logup_infos["username"]] = {
-                "pwd": logup_infos["pwd"],
+        username = self.client.recv(1024).decode("utf-8")
+        pwd = self.client.recv(1024).decode("utf-8")
+
+        if username not in self.accounts:
+            self.accounts[username] = {
+                "pwd": pwd,
                 "admin": False,
                 "token": tok2.getToken()
             }
             
             self.client_logup.send(b"201")
-            self.client_logup.send(self.accounts[logup_infos["username"]]["token"])
-        
-        else:
+            time.sleep(0.1)
+            self.client_logup.send(self.accounts[username]["token"].encode())
+            self.connected.append(username)
+            
+        elif username in self.accounts:
             self.client_logup.send(b"202")
+            self.login(client)
         
         with open("connexion.login", "wb") as file:
             picklefile = Pickler(file)
             picklefile.dump(self.accounts)
+            
+    def logout(self, client: soc):
+        """
+        301 - logout success
+        302 - logout unsuccess
+        """
+        try:
+            username = client.recv(1024).decode("utf-8")
+            user_token = client.recv(2048).decode("utf-8")
+            
+            if self.accounts[username]["token"] == user_token:
+                self.connected.pop(self.connected.index(username))
+                self.clients.pop(self.clients.index(client))
+                client.close()
+            if __name__ == "__main__":
+                print(f"{username} disconnected !")
+        except:
+            print("impossible de déconnecter !")
     
     def recv(self, client: soc, encoding="utf-8") -> str:
         
@@ -182,6 +228,18 @@ class LoginHost:
         
         if code == "002":
             self.logup(a)
+            
+    def demand_connected(self, client: soc):
+        code = client.recv(1024).decode()
+        print(f"En attente de {client.getpeername()}")
+        if code == "001":
+            self.login(client)
+        
+        if code == "002":
+            self.logup(client)
+        
+        if code == "003":
+            self.logout(client)
         
     def __delattr__(self, name: str) -> None:
         
@@ -189,10 +247,10 @@ class LoginHost:
             with open("connexion.login", "wb") as file:
                 picklefile = Pickler(file)
                 picklefile.dump(self.accounts)
-        
-    def __del__(self):
-        
-        remove("already.login.temp")
+    
+    def _thread_loop(self, func):
+        while self.looper:
+            func()
     
 
 class LoginClient:
@@ -200,7 +258,7 @@ class LoginClient:
     def __init__(self, server = "shayajs1.ddns.net", port=21):
         self.username = ...
         self.pwd = ...
-        self.token = ""
+        self.token = "None"
         self.server = server
         self.port = port
         self.client = soc(AF_INET, SOCK_STREAM)
@@ -220,6 +278,9 @@ class LoginClient:
         
         
     def login(self, username: str, pwd: str) -> ...:
+        
+        self.username = username
+        
         self.send("001")
         if __name__ == "__main__":
             time.sleep(0.5)
@@ -236,12 +297,16 @@ class LoginClient:
                 print("Connected")
             self.token = self.client.recv(1024).decode()
             self.connected_client = True
+            self.username = username
         
         if respond == "102":
             if __name__ == "__main__":
                 print("Already Connected")
-            self.send(self.token)
+                response = input("Avez-vous un Token ? (Si oui insérer Token, si non, faites enter, si un token est déjà dans la base de donné de cette machine faites enter de même): ")
+                if len(response) == 20:
+                    self.token = response
             
+            self.send(self.token)
             resp2 = self.client.recv(8).decode()
             
             if resp2 == "101":
@@ -251,20 +316,52 @@ class LoginClient:
                 print("Error, impossible de se connecter")
         
         if respond == "103":
-            self.send("002")
+            print("Enregistrement en cours...")
             self.logup(username=username, pwd=pwd)
         
         if respond == "105":
             msg = self.client.recv(2048).decode()
             print(msg)
+        
+        if respond == "104":
+            print("Impossible de se connecter")
     
     def logup(self, username, pwd):
-        acc = {"username": username,
-             "pwd": pwd}
-        self.send(json.dumps(acc).encode())
-        self.token = self.client.recv(2064)
+        self.send("003")
+        time.sleep(0.02)
+        self.send(username)
+        time.sleep(0.02)
+        self.send(pwd)
+        code = self.client.recv(8).decode()
+        print(code)
+        if code == "201":
+            self.token = self.client.recv(2048).decode()
+        
+        if code == "202":
+            self.login(username, pwd)
+    
+    def logout(self):
+        self.client.send(b"003")
+        time.sleep(0.2)
+        self.client.send(self.username.encode())
+        time.sleep(0.02)
+        self.client.send(self.token.encode())
+
 
 if __name__ == "__main__":
-    client = LoginClient("localhost", 8081)
-    client.login("test", "test")
-    print(client.connected_client, client.token)
+    argv.pop(0)
+    if argv[0] == "host":
+        host = LoginHost()
+    
+    elif argv[0] == "client":
+        loopnot = ""
+        token = "None"
+        while loopnot != "stop":
+            client = LoginClient("localhost", 8081)
+            client.token = token
+            client.login(input("Insert your username : "), input("Insert your password : "))
+            token = client.token
+            print(f"Connected :{client.connected_client}, token {client.token}")
+            loopnot = input("Tape 'stop' to stop the loop or any else if you won't : ")
+            if loopnot == "stop":
+                client.logout()
