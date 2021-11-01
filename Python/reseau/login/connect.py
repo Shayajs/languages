@@ -283,6 +283,7 @@ class LoginClient:
         self.connected = False
         self.connected_client = False
         self.last_code = str()
+        self.code_retired = ["201", "202"]
 
         
     def send(self, message: str):
@@ -299,7 +300,7 @@ class LoginClient:
     def login(self, username: str, pwd: str) -> ...:
         
         self.username = username
-        if self.last_code != "202":
+        if self.last_code not in self.code_retired:
             self.send("001")
         if __name__ == "__main__":
             time.sleep(0.5)
